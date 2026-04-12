@@ -101,15 +101,20 @@ class KeyboardProfile:
 - White keys are evenly spaced rectangles; black keys are narrower overlaid rectangles at the correct positions.
 - The SVG width scales to fit the container (responsive).
 - **Viewport/zoom:** For exercises targeting a small range (e.g., one octave around middle C), the keyboard can zoom into that range while still showing the full keyboard dimmed in the background.
-- Octave numbers (C1, C2, ... C8) are labeled below the keyboard.
-- Middle C (C4, MIDI 60) is always marked with a subtle indicator.
+- **Note labels:** All 52 white keys display their note name (A0, B0, C1, D1, …, C8) by default. C notes are rendered in bold with a larger font as octave landmarks; non-C notes use a smaller, lighter font. Labels can be toggled via the `show_labels` parameter.
+- Middle C (C4, MIDI 60) is always marked with a subtle gold indicator.
 
 #### 5.3 Lesson Module — Learn the Basics (Structured Curriculum)
 
 A progressive curriculum that teaches sight-reading from absolute zero. Each lesson unlocks after the previous one is completed with ≥ 80% accuracy.
 
+##### Level 0: The Piano Keyboard
+- **Lesson 0.1 — The Piano Keyboard:** Musical alphabet (A–G), black key grouping pattern (2s and 3s), finding Middle C, octave numbering system. Exercise: play C4–G4.
+- **Lesson 0.2 — One Octave:** All 7 white keys C4–B4 with finding tips (relative to black key groups). Exercise: play C4–B4.
+- **Lesson 0.3 — Two Octaves:** Expand range to C3–B4 (14 white keys). Exercise: play C3–B4.
+
 ##### Level 1: The Staff & Clefs
-- **Lesson 1.1 — The Staff:** Explain 5 lines, 4 spaces. Interactive SVG diagram.
+- **Lesson 1.1 — The Staff:** Explain 5 lines, 4 spaces. Interactive SVG diagram. (Prerequisite: Lesson 0.3)
 - **Lesson 1.2 — Treble Clef:** Introduce treble clef. Line notes (E-G-B-D-F), space notes (F-A-C-E). Mnemonics.
 - **Lesson 1.3 — Bass Clef:** Introduce bass clef. Line notes (G-B-D-F-A), space notes (A-C-E-G). Mnemonics.
 - **Lesson 1.4 — Grand Staff:** Combine treble + bass. Middle C as anchor point.
@@ -178,7 +183,7 @@ The keyboard is rendered dynamically based on the active **keyboard profile** (S
   - 🟦 **Blue** = target note(s) the user should play.
   - 🟩 **Green** = correct note played.
   - 🟥 **Red** = wrong note played.
-- **Note labels:** Toggle to show/hide note names on keys.
+- **Note labels:** All 52 white keys labeled by default (A0, B0, C1, D1, …, C8). C notes in bold/larger font as octave landmarks. Togglable via `show_labels` parameter (default: on).
 - **Active zone highlight:** During lessons, dim keys outside the exercise range and brighten the relevant section.
 - **Responsive:** SVG scales to fit browser width. For 88 keys, allow horizontal scroll or zoom on smaller screens.
 - **Middle C marker:** Always visible as an anchor reference.
@@ -424,30 +429,39 @@ Each milestone is a self-contained deliverable. After completing each one, devel
 
 ---
 
-#### Milestone 4 — Lesson Framework & Level 1 (The Staff & Clefs)
+#### Milestone 4 — Lesson Framework, Level 0 (Keyboard Basics) & Level 1 (The Staff & Clefs) ✅ COMPLETE
 
-**Goal:** Build the lesson system and deliver the first teaching content — what a staff is, what clefs are, and where Middle C lives.
+**Goal:** Build the lesson system and deliver teaching content from absolute basics — which key is which note on the keyboard, then what a staff is, what clefs are, and where Middle C lives.
 
 **Deliverables:**
 - [x] Lesson data model: id, title, level, content (text + diagrams), exercises, unlock criteria.
 - [x] Lesson list page (`/lessons`) showing all lessons with locked/unlocked states.
 - [x] Lesson detail page with instructional content (text + inline SVG diagrams).
-- [x] Lesson 1.1 — The Staff: interactive diagram labeling lines and spaces.
-- [x] Lesson 1.2 — Treble Clef: line/space note mnemonics + play-to-identify exercises.
-- [x] Lesson 1.3 — Bass Clef: same as 1.2 for bass clef (requires bass clef SVG renderer).
-- [x] Lesson 1.4 — Grand Staff: combined staff diagram, Middle C as bridge.
+- [x] **Level 0 — The Piano Keyboard (3 lessons):**
+  - [x] Lesson 0.1 — The Piano Keyboard: musical alphabet, black key pattern, Middle C, octave numbering. Exercise: play C4–G4.
+  - [x] Lesson 0.2 — One Octave: all 7 white keys C4–B4. Exercise: play C4–B4.
+  - [x] Lesson 0.3 — Two Octaves: C3–B4 (14 keys). Exercise: play C3–B4.
+- [x] **Level 1 — The Staff & Clefs (4 lessons):**
+  - [x] Lesson 1.1 — The Staff: interactive diagram labeling lines and spaces.
+  - [x] Lesson 1.2 — Treble Clef: line/space note mnemonics + play-to-identify exercises.
+  - [x] Lesson 1.3 — Bass Clef: same as 1.2 for bass clef (requires bass clef SVG renderer).
+  - [x] Lesson 1.4 — Grand Staff: combined staff diagram, Middle C as bridge.
+- [x] Prerequisite chain: 0.1 (unlocked) → 0.2 → 0.3 → 1.1 → 1.2 → 1.3 → 1.4.
 - [x] Completion tracking: ≥ 80% accuracy on exercises to unlock next lesson.
 - [x] SQLite database initialized on first run, stores lesson progress.
-- [x] Test suite: 60 new tests (182 total across models, curriculum, DB, bass/grand renderer, exercise engine, pages).
+- [x] **Keyboard note labels:** all 52 white keys labeled (C notes bold/larger as landmarks).
+- [x] Test suite: 193 total tests (models, curriculum, DB, keyboard labels, bass/grand renderer, exercise engine, Level 0 integration, pages).
 
 **Verification checklist:**
-> 1. `/lessons` page shows Level 1 lessons. Lesson 1.1 is unlocked, rest are locked.
-> 2. Open Lesson 1.1 → educational content explains the staff clearly with a diagram.
-> 3. Complete Lesson 1.1 exercises with ≥ 80% → Lesson 1.2 unlocks.
-> 4. Lesson 1.2 teaches treble clef notes → exercise asks you to play them.
-> 5. Lesson 1.3 renders a bass clef staff correctly.
-> 6. Lesson 1.4 shows a grand staff with Middle C connecting both.
-> 7. Close and reopen the app → progress is preserved (lessons stay unlocked).
+> 1. `/lessons` page shows Level 0 and Level 1 lessons. Lesson 0.1 is unlocked, rest are locked.
+> 2. Open Lesson 0.1 → educational content teaches the musical alphabet and keyboard layout.
+> 3. Complete Lesson 0.1–0.3 exercises with ≥ 80% → Level 1 lessons unlock progressively.
+> 4. Lesson 1.1 explains the staff clearly with a diagram.
+> 5. Lesson 1.2 teaches treble clef notes → exercise asks you to play them.
+> 6. Lesson 1.3 renders a bass clef staff correctly.
+> 7. Lesson 1.4 shows a grand staff with Middle C connecting both.
+> 8. All white keys on the virtual keyboard display their note name.
+> 9. Close and reopen the app → progress is preserved (lessons stay unlocked).
 
 ---
 
