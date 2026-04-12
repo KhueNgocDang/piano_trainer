@@ -86,6 +86,8 @@ class NoteDrill:
         self._staff_html: ui.html | None = None
         self._score_label: ui.label | None = None
         self._feedback_label: ui.label | None = None
+        self._played_label: ui.label | None = None
+        self._target_label: ui.label | None = None
         self._active = False
 
     def create_ui(self) -> None:
@@ -93,8 +95,7 @@ class NoteDrill:
         with ui.card().classes("w-full p-4"):
             ui.label("Note Reading Drill").classes("text-h6")
             ui.markdown(
-                "A note appears on the staff. Play the matching key on your piano. "
-                "**Green** = correct, **Red** = wrong (blue shows the right key)."
+                "A note appears on the staff. Play the matching key on your piano."
             )
 
             with ui.row().classes("items-center gap-4 q-my-sm"):
@@ -109,9 +110,21 @@ class NoteDrill:
                     "text-subtitle1"
                 )
 
-            self._feedback_label = ui.label("").classes(
-                "text-subtitle2 q-my-xs"
-            )
+            # Feedback row: target + played note + result
+            with ui.row().classes("items-center gap-6 q-my-sm"):
+                with ui.column().classes("items-center gap-0"):
+                    ui.label("Target").classes("text-caption text-grey-6")
+                    self._target_label = ui.label("—").classes(
+                        "text-h5 font-bold text-blue-800"
+                    )
+                with ui.column().classes("items-center gap-0"):
+                    ui.label("You played").classes("text-caption text-grey-6")
+                    self._played_label = ui.label("—").classes(
+                        "text-h5 font-bold text-grey-5"
+                    )
+                self._feedback_label = ui.label("").classes(
+                    "text-h6 font-bold q-ml-md"
+                )
 
             self._staff_html = ui.html(render_staff_svg()).classes(
                 "w-full q-my-md"
@@ -129,6 +142,9 @@ class NoteDrill:
         self._update_score()
         if self._feedback_label:
             self._feedback_label.text = ""
+        if self._played_label:
+            self._played_label.text = "—"
+            self._played_label.classes(replace="text-h5 font-bold text-grey-5")
         self._next_note()
         # Register note handler on bridge
         self._bridge.on_note_callback = self._on_note
@@ -139,17 +155,33 @@ class NoteDrill:
         self._start_btn.visible = True
         self._stop_btn.visible = False
         self._bridge.on_note_callback = None
+        # Clear target highlight
+        ui.run_javascript(f"resetPianoKey({self._state.target_midi})")
+        if self._target_label:
+            self._target_label.text = "—"
         if self._feedback_label:
             total = self._state.hits + self._state.misses
             if total > 0:
                 pct = self._state.hits / total * 100
-                self._feedback_label.text = f"Session complete! {self._state.hits}/{total} correct ({pct:.0f}%)"
+                self._feedback_label.text = f"Done! {self._state.hits}/{total} ({pct:.0f}%)"
+                self._feedback_label.classes(replace="text-h6 font-bold q-ml-md text-blue-800")
 
     def _next_note(self) -> None:
         """Pick and display the next target note."""
+        # Clear previous target highlight
+        if self._state.target_midi:
+            ui.run_javascript(f"resetPianoKey({self._state.target_midi})")
+
         midi = self._state.pick_next()
         if self._staff_html:
             self._staff_html.content = render_staff_svg(target_midi=midi)
+
+        # Show target note name
+        if self._target_label:
+            self._target_label.text = midi_to_note_name(midi)
+
+        # Highlight the target key on the keyboard in blue
+        ui.run_javascript(f"highlightPianoKeyPersist({midi}, '#42A5F5')")
 
     def _on_note(self, note: int, velocity: int) -> None:
         """Handle a MIDI note_on from the bridge."""
@@ -158,39 +190,35 @@ class NoteDrill:
 
         target = self._state.target_midi
         self._state.total += 1
+        played_name = midi_to_note_name(note)
+
+        # Show what they played
+        if self._played_label:
+            self._played_label.text = played_name
 
         if note == target:
             # Correct!
             self._state.hits += 1
-            ui.run_javascript(
-                f"flashPianoKey({note}, '#4CAF50', 500)"
-            )  # green
+            ui.run_javascript(f"resetPianoKey({target})")  # clear blue hint
+            ui.run_javascript(f"flashPianoKey({note}, '#4CAF50', 400)")  # green
+            if self._played_label:
+                self._played_label.classes(replace="text-h5 font-bold text-green-600")
             if self._feedback_label:
-                name = midi_to_note_name(target)
-                self._feedback_label.text = f"✓ Correct! {name}"
-                self._feedback_label.classes(
-                    replace="text-subtitle2 q-my-xs text-green-600"
-                )
+                self._feedback_label.text = "✓ Correct!"
+                self._feedback_label.classes(replace="text-h6 font-bold q-ml-md text-green-600")
             self._update_score()
             self._next_note()
         else:
             # Wrong
             self._state.misses += 1
-            ui.run_javascript(
-                f"flashPianoKey({note}, '#F44336', 500)"
-            )  # red flash played key
-            ui.run_javascript(
-                f"flashPianoKey({target}, '#2196F3', 1200)"
-            )  # blue hint target
+            ui.run_javascript(f"flashPianoKey({note}, '#F44336', 600)")  # red
+            # Keep target blue (already highlighted)
+            if self._played_label:
+                self._played_label.classes(replace="text-h5 font-bold text-red-600")
             if self._feedback_label:
-                played_name = midi_to_note_name(note)
                 target_name = midi_to_note_name(target)
-                self._feedback_label.text = (
-                    f"✗ You played {played_name}, expected {target_name}"
-                )
-                self._feedback_label.classes(
-                    replace="text-subtitle2 q-my-xs text-red-600"
-                )
+                self._feedback_label.text = f"✗ Wrong — play {target_name}"
+                self._feedback_label.classes(replace="text-h6 font-bold q-ml-md text-red-600")
             self._update_score()
 
     def _update_score(self) -> None:
