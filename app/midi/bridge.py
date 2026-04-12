@@ -130,11 +130,13 @@ class MidiBridge:
         self.device_name = data.get("device", "")
         error = data.get("error", "")
 
+        if error:
+            self._add_log(error, "error")
+
         if self._badge:
             if error:
                 self._badge.text = f"MIDI: {error}"
                 self._badge._props["color"] = "red"
-                self._add_log(error, "error")
             elif self.connected:
                 self._badge.text = f"MIDI: {self.device_name}"
                 self._badge._props["color"] = "green"
