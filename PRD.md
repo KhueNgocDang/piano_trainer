@@ -403,14 +403,15 @@ Each milestone is a self-contained deliverable. After completing each one, devel
 **Goal:** Render a treble clef staff with a single note, and validate whether the user played the correct note.
 
 **Deliverables:**
-- [ ] Custom SVG renderer: 5-line staff with treble clef symbol.
-- [ ] Render a single note (filled/open note head) at the correct vertical position for any note in the treble clef range (C4–C6).
-- [ ] Ledger lines for notes below/above the staff (e.g., Middle C).
-- [ ] Note-to-staff-position mapping function (MIDI number → staff line/space in treble clef).
-- [ ] Generate a random target note → display on staff → wait for MIDI input → compare.
-- [ ] Correct: keyboard key flashes green, advance to next note.
-- [ ] Wrong: keyboard key flashes red, target key highlighted in blue.
-- [ ] Simple hit/miss counter displayed on screen.
+- [x] Custom SVG renderer: 5-line staff with treble clef symbol.
+- [x] Render a single note (filled/open note head) at the correct vertical position for any note in the treble clef range (C4–C6).
+- [x] Ledger lines for notes below/above the staff (e.g., Middle C).
+- [x] Note-to-staff-position mapping function (MIDI number → staff line/space in treble clef).
+- [x] Generate a random target note → display on staff → wait for MIDI input → compare.
+- [x] Correct: keyboard key flashes green, advance to next note.
+- [x] Wrong: keyboard key flashes red, target key highlighted in blue.
+- [x] Simple hit/miss counter displayed on screen.
+- [x] Test suite: 52 new tests (121 total across staff renderer, drill state, bridge callback, pages).
 
 **Verification checklist:**
 > 1. A note appears on the treble clef staff — it looks like proper sheet music.

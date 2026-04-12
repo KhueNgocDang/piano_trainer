@@ -37,6 +37,7 @@ class MidiBridge:
         self.device_name: str = ""
         self.devices: list[dict] = []
         self.log_entries: list[MidiEvent] = []
+        self.on_note_callback = None  # callable(note, velocity) set by drill/games
 
         # UI references (set during setup)
         self._badge: ui.badge | None = None
@@ -105,6 +106,8 @@ class MidiBridge:
         self._add_log(
             f"NOTE ON:  {name} (MIDI {note}) vel={velocity}", "note_on"
         )
+        if self.on_note_callback and velocity > 0:
+            self.on_note_callback(note, velocity)
 
     def _on_note_off(self, data: dict) -> None:
         note = data.get("note", 0)

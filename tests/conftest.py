@@ -17,6 +17,7 @@ def bridge():
     b.device_name = ""
     b.devices = []
     b.log_entries = []
+    b.on_note_callback = None
     b._badge = None
     b._device_select = None
     b._log_container = None
