@@ -1,4 +1,11 @@
-"""Note drill — generates random notes on the treble clef staff and checks MIDI input."""
+"""Note drill — generates random notes on the treble clef staff and checks MIDI input.
+
+Future improvement – Note queue / look-ahead display:
+  Instead of showing one note at a time, render a queue of upcoming notes
+  on the staff (e.g. 4-8 visible). The leftmost note is the current target;
+  when played correctly it slides off and the queue advances. This teaches
+  reading ahead, a core sight-reading skill. See PRD §11 Open Questions #3.
+"""
 
 from __future__ import annotations
 

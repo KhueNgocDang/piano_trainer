@@ -610,6 +610,7 @@ Each milestone is a self-contained deliverable. After completing each one, devel
 
 1. **Audio reference playback:** Should the app play a reference tone via Web Audio API when showing a target note? This helps ear training but may be distracting during sight-reading drills.
 2. **Keyboard profile auto-detection:** MIDI `Device Inquiry` SysEx can identify the instrument model. Worth implementing, or just let the user pick from a list?
+3. **Note queue / look-ahead display:** Instead of showing one note at a time, render a scrollable queue of upcoming notes on the staff (e.g., 4–8 notes visible). The leftmost note is the current target; when played correctly it slides off and the queue advances — similar to how real sheet music gives you a look-ahead. This encourages reading ahead (a core sight-reading skill). Configuration options: queue length (1 = current behaviour, 2–8 for look-ahead), scroll speed (for timed mode), and fade/opacity on future notes. This can be layered on top of the existing drill (Milestone 3) and timed practice (Milestone 9) without breaking either.
 
 ---
 
