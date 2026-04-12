@@ -378,13 +378,14 @@ Each milestone is a self-contained deliverable. After completing each one, devel
 **Goal:** Render a full 88-key CASIO Privia keyboard as interactive SVG that lights up in real-time when you play.
 
 **Deliverables:**
-- [ ] `KeyboardProfile` dataclass with CASIO Privia as the default profile.
-- [ ] SVG keyboard renderer: 88 keys (A0–C8), white + black keys at correct positions.
-- [ ] Octave labels (C1, C2, ... C8) below the keyboard.
-- [ ] Middle C (C4) marker.
-- [ ] Real-time key highlighting: pressing a key on the CASIO instantly highlights the SVG key (client-side JS, no server round-trip).
-- [ ] Keys return to default color on `note_off`.
-- [ ] Keyboard scales responsively to browser width.
+- [x] `KeyboardProfile` dataclass with CASIO Privia as the default profile.
+- [x] SVG keyboard renderer: 88 keys (A0–C8), white + black keys at correct positions.
+- [x] Octave labels (C1, C2, ... C8) below the keyboard.
+- [x] Middle C (C4) marker.
+- [x] Real-time key highlighting: pressing a key on the CASIO instantly highlights the SVG key (client-side JS, no server round-trip).
+- [x] Keys return to default color on `note_off`.
+- [x] Keyboard scales responsively to browser width.
+- [x] Test suite: 43 new tests (69 total across profiles, renderer, SVG output, highlight JS, pages).
 
 **Verification checklist:**
 > 1. Open the app → 88-key keyboard is visible, properly proportioned.
