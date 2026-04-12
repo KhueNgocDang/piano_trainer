@@ -322,14 +322,26 @@ Standard formula: `note_name = ['C','C#','D','D#','E','F','F#','G','G#','A','A#'
 ```toml
 [project]
 dependencies = [
-    "nicegui>=2.0",        # UI framework
+    "nicegui>=3.10",       # UI framework (FastAPI + Vue.js, WebSocket)
     "aiosqlite",           # Async SQLite for progress tracking
     "mido",                # MIDI message parsing (fallback path)
     "python-rtmidi",       # MIDI device access (fallback path)
 ]
+
+[dependency-groups]
+dev = [
+    "pytest",              # Test runner
+    "pytest-asyncio",      # Async test support
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 ```
 
 No heavy music libraries. Notation rendering is custom SVG. Audio is browser-native Web Audio API.
+
+**Testing:** NiceGUI's `user_plugin` for fast integration tests (simulated browser, no Selenium). Unit tests for MIDI logic. Run with `uv run pytest tests/ -v`.
 
 ---
 
@@ -339,17 +351,18 @@ Each milestone is a self-contained deliverable. After completing each one, devel
 
 ---
 
-#### Milestone 1 — App Shell & MIDI Connection
+#### Milestone 1 — App Shell & MIDI Connection ✅ COMPLETE
 
 **Goal:** Prove the technical foundation works — NiceGUI serves a page, the CASIO Privia is detected, and MIDI notes arrive in the browser.
 
 **Deliverables:**
-- [ ] NiceGUI app boots and serves on `localhost:8080`.
-- [ ] Page layout with header bar and left-drawer navigation (placeholder pages).
-- [ ] Web MIDI API JavaScript injected on page load.
-- [ ] MIDI device dropdown populated with detected devices.
-- [ ] Connection status badge (green/red) in the header.
-- [ ] Console/debug panel shows raw MIDI `note_on`/`note_off` events as they arrive from the CASIO.
+- [x] NiceGUI app boots and serves on `localhost:8080`.
+- [x] Page layout with header bar and left-drawer navigation (placeholder pages).
+- [x] Web MIDI API JavaScript injected on page load.
+- [x] MIDI device dropdown populated with detected devices.
+- [x] Connection status badge (green/red) in the header.
+- [x] Console/debug panel shows raw MIDI `note_on`/`note_off` events as they arrive from the CASIO.
+- [x] Test suite: 26 tests (6 MIDI JS, 11 bridge logic, 9 page integration).
 
 **Verification checklist:**
 > 1. Run the app → browser opens → you see the navigation drawer and header.
