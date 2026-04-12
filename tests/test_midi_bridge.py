@@ -66,7 +66,9 @@ def test_bridge_on_status_disconnected(bridge: MidiBridge):
 
 
 def test_bridge_on_status_error(bridge: MidiBridge):
-    bridge._on_status({"connected": False, "device": "", "error": "MIDI access denied"})
+    bridge._on_status(
+        {"connected": False, "device": "", "error": "MIDI access denied"}
+    )
     assert bridge.connected is False
     assert any("MIDI access denied" in e.message for e in bridge.log_entries)
 
