@@ -61,6 +61,12 @@ async def test_home_has_quick_start_buttons(user: User):
 
 async def test_lessons_page_shows_lesson_list(user: User):
     await user.open("/lessons")
+    await user.should_see("Lesson 0.1")
+    await user.should_see("The Piano Keyboard")
+
+
+async def test_lessons_page_shows_level_1(user: User):
+    await user.open("/lessons")
     await user.should_see("Lesson 1.1")
     await user.should_see("The Staff")
 
@@ -107,3 +113,9 @@ async def test_lesson_1_3_bass_clef(user: User):
 async def test_lesson_1_4_grand_staff(user: User):
     await user.open("/lessons/1.4")
     await user.should_see("Grand Staff")
+
+
+async def test_lesson_0_1_keyboard_basics(user: User):
+    await user.open("/lessons/0.1")
+    await user.should_see("The Piano Keyboard")
+    await user.should_see("Musical Alphabet")

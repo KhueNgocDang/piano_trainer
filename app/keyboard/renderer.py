@@ -59,11 +59,18 @@ def _build_white_key_map(profile: KeyboardProfile) -> dict[int, int]:
 # ── SVG generation ───────────────────────────────────────────────
 
 
-def render_keyboard_svg(profile: KeyboardProfile = CASIO_PRIVIA) -> str:
+def render_keyboard_svg(
+    profile: KeyboardProfile = CASIO_PRIVIA,
+    show_labels: bool = True,
+) -> str:
     """Generate a complete SVG string for the keyboard.
 
     Each key ``<rect>`` carries ``id="piano-key-{midi}"`` plus ``data-default-color``
     and ``data-active-color`` attributes used by the client-side highlight JS.
+
+    Args:
+        profile: Keyboard profile defining the MIDI range.
+        show_labels: If True, render note names (A3, B3, C4, …) on white keys.
     """
     wk_map = _build_white_key_map(profile)
     num_white = len(wk_map)
@@ -120,27 +127,42 @@ def render_keyboard_svg(profile: KeyboardProfile = CASIO_PRIVIA) -> str:
             f'font-family="sans-serif">C4</text>'
         )
 
-    # ── Octave labels (every C note) ────────────────────────────
-    for midi in range(profile.midi_start, profile.midi_end + 1):
-        if midi % 12 == 0 and midi in wk_map:
-            octave = midi // 12 - 1
-            lx = wk_map[midi] * WHITE_KEY_STRIDE + WHITE_KEY_WIDTH / 2
+    # ── Note labels on white keys ──────────────────────────────────
+    if show_labels:
+        for midi, idx in wk_map.items():
+            name = midi_note_name(midi)
+            lx = idx * WHITE_KEY_STRIDE + WHITE_KEY_WIDTH / 2
+            ly = WHITE_KEY_HEIGHT + 14
+            # Use slightly larger font for C notes (octave landmarks)
+            is_c = midi % 12 == 0
+            font_size = 10 if is_c else 8
+            weight = "bold" if is_c else "normal"
+            color = "#333" if is_c else LABEL_COLOR
+            parts.append(
+                f'<text x="{lx}" y="{ly}" text-anchor="middle" '
+                f'font-size="{font_size}" font-weight="{weight}" fill="{color}" '
+                f'font-family="sans-serif">{name}</text>'
+            )
+    else:
+        # Minimal labels: only C notes + A0
+        for midi in range(profile.midi_start, profile.midi_end + 1):
+            if midi % 12 == 0 and midi in wk_map:
+                octave = midi // 12 - 1
+                lx = wk_map[midi] * WHITE_KEY_STRIDE + WHITE_KEY_WIDTH / 2
+                ly = WHITE_KEY_HEIGHT + 14
+                parts.append(
+                    f'<text x="{lx}" y="{ly}" text-anchor="middle" '
+                    f'font-size="10" fill="{LABEL_COLOR}" '
+                    f'font-family="sans-serif">C{octave}</text>'
+                )
+        if profile.midi_start == 21 and 21 in wk_map:
+            lx = wk_map[21] * WHITE_KEY_STRIDE + WHITE_KEY_WIDTH / 2
             ly = WHITE_KEY_HEIGHT + 14
             parts.append(
                 f'<text x="{lx}" y="{ly}" text-anchor="middle" '
                 f'font-size="10" fill="{LABEL_COLOR}" '
-                f'font-family="sans-serif">C{octave}</text>'
+                f'font-family="sans-serif">A0</text>'
             )
-
-    # ── A0 label (start of keyboard) ─────────────────────────────
-    if profile.midi_start == 21 and 21 in wk_map:
-        lx = wk_map[21] * WHITE_KEY_STRIDE + WHITE_KEY_WIDTH / 2
-        ly = WHITE_KEY_HEIGHT + 14
-        parts.append(
-            f'<text x="{lx}" y="{ly}" text-anchor="middle" '
-            f'font-size="10" fill="{LABEL_COLOR}" '
-            f'font-family="sans-serif">A0</text>'
-        )
 
     parts.append("</svg>")
     return "\n".join(parts)
@@ -149,7 +171,10 @@ def render_keyboard_svg(profile: KeyboardProfile = CASIO_PRIVIA) -> str:
 # ── NiceGUI component ───────────────────────────────────────────
 
 
-def create_keyboard(profile: KeyboardProfile = CASIO_PRIVIA) -> ui.html:
+def create_keyboard(
+    profile: KeyboardProfile = CASIO_PRIVIA,
+    show_labels: bool = True,
+) -> ui.html:
     """Add an interactive SVG keyboard to the current NiceGUI page."""
-    svg = render_keyboard_svg(profile)
+    svg = render_keyboard_svg(profile, show_labels=show_labels)
     return ui.html(svg).classes("w-full")

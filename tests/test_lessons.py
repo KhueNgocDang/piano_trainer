@@ -12,11 +12,15 @@ from app.keyboard.renderer import is_black_key
 from app.lessons.models import Clef, Exercise, Lesson, LessonType
 from app.lessons.curriculum import (
     ALL_LESSONS,
+    LESSON_0_1,
+    LESSON_0_2,
+    LESSON_0_3,
     LESSON_1_1,
     LESSON_1_2,
     LESSON_1_3,
     LESSON_1_4,
     LESSON_BY_ID,
+    LEVEL_0_LESSONS,
     LEVEL_1_LESSONS,
 )
 from app.lessons import db as lesson_db
@@ -82,23 +86,31 @@ class TestLessonModels:
 
 class TestCurriculum:
     def test_all_lessons_count(self):
-        assert len(ALL_LESSONS) == 4
+        assert len(ALL_LESSONS) == 7  # 3 Level 0 + 4 Level 1
 
-    def test_level_1_is_all_lessons(self):
-        assert LEVEL_1_LESSONS == ALL_LESSONS
+    def test_level_0_and_1_make_all(self):
+        assert ALL_LESSONS == LEVEL_0_LESSONS + LEVEL_1_LESSONS
 
     def test_lesson_ids_unique(self):
         ids = [l.id for l in ALL_LESSONS]
         assert len(ids) == len(set(ids))
 
     def test_lesson_by_id(self):
+        assert LESSON_BY_ID["0.1"] is LESSON_0_1
         assert LESSON_BY_ID["1.1"] is LESSON_1_1
         assert LESSON_BY_ID["1.4"] is LESSON_1_4
 
-    def test_lesson_1_1_unlocked(self):
-        assert LESSON_1_1.prerequisite_id is None
+    def test_lesson_0_1_unlocked(self):
+        assert LESSON_0_1.prerequisite_id is None
 
-    def test_lesson_prerequisite_chain(self):
+    def test_level_0_prerequisite_chain(self):
+        assert LESSON_0_2.prerequisite_id == "0.1"
+        assert LESSON_0_3.prerequisite_id == "0.2"
+
+    def test_level_1_requires_level_0(self):
+        assert LESSON_1_1.prerequisite_id == "0.3"
+
+    def test_level_1_prerequisite_chain(self):
         assert LESSON_1_2.prerequisite_id == "1.1"
         assert LESSON_1_3.prerequisite_id == "1.2"
         assert LESSON_1_4.prerequisite_id == "1.3"
@@ -106,6 +118,30 @@ class TestCurriculum:
     def test_all_lessons_have_exercises(self):
         for lesson in ALL_LESSONS:
             assert len(lesson.exercises) >= 1
+
+    def test_level_0_lessons_have_content(self):
+        for lesson in LEVEL_0_LESSONS:
+            assert len(lesson.content_md) > 50
+            assert lesson.level == 0
+
+    def test_lesson_0_1_center_keys(self):
+        ex = LESSON_0_1.exercises[0]
+        # C4, D4, E4, F4, G4
+        assert set(ex.note_pool) == {60, 62, 64, 65, 67}
+
+    def test_lesson_0_2_one_octave(self):
+        ex = LESSON_0_2.exercises[0]
+        # C4–B4 (7 white keys)
+        assert len(ex.note_pool) == 7
+        assert ex.note_pool[0] == 60  # C4
+        assert ex.note_pool[-1] == 71  # B4
+
+    def test_lesson_0_3_two_octaves(self):
+        ex = LESSON_0_3.exercises[0]
+        # C3–B4 (14 white keys)
+        assert len(ex.note_pool) == 14
+        for m in ex.note_pool:
+            assert not is_black_key(m)
 
     def test_lesson_1_1_treble_lines(self):
         ex = LESSON_1_1.exercises[0]

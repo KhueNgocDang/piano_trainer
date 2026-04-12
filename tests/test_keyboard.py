@@ -163,12 +163,32 @@ class TestRenderSVG:
         assert "data-active-color" in key_str
 
     def test_octave_labels_present(self, svg):
-        # C1 through C8
+        # C1 through C8 — now part of full note labels
         for octave in range(1, 9):
             assert f">C{octave}</text>" in svg
 
     def test_a0_label(self, svg):
         assert ">A0</text>" in svg
+
+    def test_all_white_keys_labeled(self, svg):
+        """Every white key should have a note name label."""
+        from app.keyboard.renderer import midi_note_name
+        for midi in range(21, 109):
+            if not is_black_key(midi):
+                name = midi_note_name(midi)
+                assert f">{name}</text>" in svg, f"Missing label for {name} (MIDI {midi})"
+
+    def test_c_notes_bold(self, svg):
+        """C notes should have bold labels."""
+        assert 'font-weight="bold"' in svg
+
+    def test_show_labels_false(self):
+        """With show_labels=False, only C notes and A0 are labeled."""
+        svg = render_keyboard_svg(CASIO_PRIVIA, show_labels=False)
+        assert ">C4</text>" in svg
+        assert ">A0</text>" in svg
+        # D4 should NOT be labeled
+        assert ">D4</text>" not in svg
 
     def test_white_keys_in_order(self, svg):
         """First white key has x=0, second has x=STRIDE."""
