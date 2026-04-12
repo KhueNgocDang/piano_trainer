@@ -135,6 +135,14 @@ class NoteDrill:
 
     def _start(self) -> None:
         """Start or restart the drill."""
+        if not self._bridge.connected:
+            ui.notify(
+                "No MIDI device connected. Please select a device in the header first.",
+                type="warning",
+                position="top",
+                close_button=True,
+            )
+            return
         self._state = DrillState()
         self._active = True
         self._start_btn.visible = False
@@ -163,8 +171,12 @@ class NoteDrill:
             total = self._state.hits + self._state.misses
             if total > 0:
                 pct = self._state.hits / total * 100
-                self._feedback_label.text = f"Done! {self._state.hits}/{total} ({pct:.0f}%)"
-                self._feedback_label.classes(replace="text-h6 font-bold q-ml-md text-blue-800")
+                self._feedback_label.text = (
+                    f"Done! {self._state.hits}/{total} ({pct:.0f}%)"
+                )
+                self._feedback_label.classes(
+                    replace="text-h6 font-bold q-ml-md text-blue-800"
+                )
 
     def _next_note(self) -> None:
         """Pick and display the next target note."""
@@ -200,12 +212,18 @@ class NoteDrill:
             # Correct!
             self._state.hits += 1
             ui.run_javascript(f"resetPianoKey({target})")  # clear blue hint
-            ui.run_javascript(f"flashPianoKey({note}, '#4CAF50', 400)")  # green
+            ui.run_javascript(
+                f"flashPianoKey({note}, '#4CAF50', 400)"
+            )  # green
             if self._played_label:
-                self._played_label.classes(replace="text-h5 font-bold text-green-600")
+                self._played_label.classes(
+                    replace="text-h5 font-bold text-green-600"
+                )
             if self._feedback_label:
                 self._feedback_label.text = "✓ Correct!"
-                self._feedback_label.classes(replace="text-h6 font-bold q-ml-md text-green-600")
+                self._feedback_label.classes(
+                    replace="text-h6 font-bold q-ml-md text-green-600"
+                )
             self._update_score()
             self._next_note()
         else:
@@ -214,11 +232,15 @@ class NoteDrill:
             ui.run_javascript(f"flashPianoKey({note}, '#F44336', 600)")  # red
             # Keep target blue (already highlighted)
             if self._played_label:
-                self._played_label.classes(replace="text-h5 font-bold text-red-600")
+                self._played_label.classes(
+                    replace="text-h5 font-bold text-red-600"
+                )
             if self._feedback_label:
                 target_name = midi_to_note_name(target)
                 self._feedback_label.text = f"✗ Wrong — play {target_name}"
-                self._feedback_label.classes(replace="text-h6 font-bold q-ml-md text-red-600")
+                self._feedback_label.classes(
+                    replace="text-h6 font-bold q-ml-md text-red-600"
+                )
             self._update_score()
 
     def _update_score(self) -> None:
