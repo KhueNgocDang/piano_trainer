@@ -144,7 +144,14 @@ class TestLedgerLines:
 class TestMidiToNoteName:
     @pytest.mark.parametrize(
         "midi,name",
-        [(60, "C4"), (71, "B4"), (72, "C5"), (84, "C6"), (69, "A4"), (61, "C#4")],
+        [
+            (60, "C4"),
+            (71, "B4"),
+            (72, "C5"),
+            (84, "C6"),
+            (69, "A4"),
+            (61, "C#4"),
+        ],
     )
     def test_note_names(self, midi, name):
         assert midi_to_note_name(midi) == name
@@ -212,9 +219,9 @@ class TestDrillState:
         state = DrillState()
         notes = [state.pick_next() for _ in range(20)]
         for i in range(len(notes) - 3):
-            assert not (notes[i] == notes[i + 1] == notes[i + 2] == notes[i + 3]), (
-                f"Four repeats in a row at index {i}: {notes[i]}"
-            )
+            assert not (
+                notes[i] == notes[i + 1] == notes[i + 2] == notes[i + 3]
+            ), f"Four repeats in a row at index {i}: {notes[i]}"
 
     def test_hits_and_misses_start_zero(self):
         state = DrillState()
@@ -270,13 +277,17 @@ class TestFlashJS:
 class TestBridgeNoteCallback:
     def test_callback_fires_on_note_on(self, bridge):
         received = []
-        bridge.on_note_callback = lambda note, vel: received.append((note, vel))
+        bridge.on_note_callback = lambda note, vel: received.append(
+            (note, vel)
+        )
         bridge._on_note_on({"note": 60, "velocity": 80, "name": "C4"})
         assert received == [(60, 80)]
 
     def test_callback_not_fired_on_zero_velocity(self, bridge):
         received = []
-        bridge.on_note_callback = lambda note, vel: received.append((note, vel))
+        bridge.on_note_callback = lambda note, vel: received.append(
+            (note, vel)
+        )
         bridge._on_note_on({"note": 60, "velocity": 0, "name": "C4"})
         assert received == []
 

@@ -37,7 +37,9 @@ class MidiBridge:
         self.device_name: str = ""
         self.devices: list[dict] = []
         self.log_entries: list[MidiEvent] = []
-        self.on_note_callback = None  # callable(note, velocity) set by drill/games
+        self.on_note_callback = (
+            None  # callable(note, velocity) set by drill/games
+        )
 
         # UI references (set during setup)
         self._badge: ui.badge | None = None

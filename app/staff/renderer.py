@@ -40,7 +40,18 @@ SVG_WIDTH = 450
 # Pitch class ordering (one step = one diatonic step)
 _PITCH_CLASSES = ("C", "D", "E", "F", "G", "A", "B")
 _NOTE_NAMES_SHARP = (
-    "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B",
+    "C",
+    "C#",
+    "D",
+    "D#",
+    "E",
+    "F",
+    "F#",
+    "G",
+    "G#",
+    "A",
+    "A#",
+    "B",
 )
 
 # B4 reference: MIDI 71, on line 3 (index 2 → y = STAFF_TOP + 2*LINE_SPACING)
@@ -115,7 +126,7 @@ def needs_ledger_lines(midi: int) -> list[float]:
 
 _TREBLE_CLEF_SVG = (
     '<g transform="translate({cx},{cy}) scale(0.35)" fill="#222" stroke="none">'
-    "<path d=\""
+    '<path d="'
     "M 0 -70 "
     "C -2 -70, -14 -60, -14 -46 "
     "C -14 -28, 2 -16, 2 0 "

@@ -14,9 +14,7 @@ from app.staff.renderer import (
 )
 
 # Treble clef natural notes: C4 (60) to C6 (84), excluding sharps/flats
-TREBLE_NATURAL_RANGE = [
-    m for m in range(60, 85) if not is_black_key(m)
-]
+TREBLE_NATURAL_RANGE = [m for m in range(60, 85) if not is_black_key(m)]
 
 
 @dataclass
@@ -31,7 +29,11 @@ class DrillState:
 
     def pick_next(self) -> int:
         """Pick a new random target, avoiding recent repeats."""
-        avoid = set(self.recent_targets[-3:]) if len(self.recent_targets) >= 3 else set(self.recent_targets)
+        avoid = (
+            set(self.recent_targets[-3:])
+            if len(self.recent_targets) >= 3
+            else set(self.recent_targets)
+        )
         candidates = [n for n in TREBLE_NATURAL_RANGE if n not in avoid]
         if not candidates:
             candidates = TREBLE_NATURAL_RANGE
@@ -101,12 +103,15 @@ class NoteDrill:
                 ).props("color=primary")
                 self._stop_btn = ui.button(
                     "Stop", icon="stop", on_click=self._stop
-                ).props("color=negative outline").set_visibility(False)
+                ).props("color=negative outline")
+                self._stop_btn.visible = False
                 self._score_label = ui.label("Hits: 0 / Misses: 0").classes(
                     "text-subtitle1"
                 )
 
-            self._feedback_label = ui.label("").classes("text-subtitle2 q-my-xs")
+            self._feedback_label = ui.label("").classes(
+                "text-subtitle2 q-my-xs"
+            )
 
             self._staff_html = ui.html(render_staff_svg()).classes(
                 "w-full q-my-md"
@@ -119,8 +124,8 @@ class NoteDrill:
         """Start or restart the drill."""
         self._state = DrillState()
         self._active = True
-        self._start_btn.set_visibility(False)
-        self._stop_btn.set_visibility(True)
+        self._start_btn.visible = False
+        self._stop_btn.visible = True
         self._update_score()
         if self._feedback_label:
             self._feedback_label.text = ""
@@ -131,16 +136,14 @@ class NoteDrill:
     def _stop(self) -> None:
         """Stop the drill."""
         self._active = False
-        self._start_btn.set_visibility(True)
-        self._stop_btn.set_visibility(False)
+        self._start_btn.visible = True
+        self._stop_btn.visible = False
         self._bridge.on_note_callback = None
         if self._feedback_label:
             total = self._state.hits + self._state.misses
             if total > 0:
                 pct = self._state.hits / total * 100
-                self._feedback_label.text = (
-                    f"Session complete! {self._state.hits}/{total} correct ({pct:.0f}%)"
-                )
+                self._feedback_label.text = f"Session complete! {self._state.hits}/{total} correct ({pct:.0f}%)"
 
     def _next_note(self) -> None:
         """Pick and display the next target note."""
@@ -159,25 +162,35 @@ class NoteDrill:
         if note == target:
             # Correct!
             self._state.hits += 1
-            ui.run_javascript(f"flashPianoKey({note}, '#4CAF50', 500)")  # green
+            ui.run_javascript(
+                f"flashPianoKey({note}, '#4CAF50', 500)"
+            )  # green
             if self._feedback_label:
                 name = midi_to_note_name(target)
                 self._feedback_label.text = f"✓ Correct! {name}"
-                self._feedback_label.classes(replace="text-subtitle2 q-my-xs text-green-600")
+                self._feedback_label.classes(
+                    replace="text-subtitle2 q-my-xs text-green-600"
+                )
             self._update_score()
             self._next_note()
         else:
             # Wrong
             self._state.misses += 1
-            ui.run_javascript(f"flashPianoKey({note}, '#F44336', 500)")  # red flash played key
-            ui.run_javascript(f"flashPianoKey({target}, '#2196F3', 1200)")  # blue hint target
+            ui.run_javascript(
+                f"flashPianoKey({note}, '#F44336', 500)"
+            )  # red flash played key
+            ui.run_javascript(
+                f"flashPianoKey({target}, '#2196F3', 1200)"
+            )  # blue hint target
             if self._feedback_label:
                 played_name = midi_to_note_name(note)
                 target_name = midi_to_note_name(target)
                 self._feedback_label.text = (
                     f"✗ You played {played_name}, expected {target_name}"
                 )
-                self._feedback_label.classes(replace="text-subtitle2 q-my-xs text-red-600")
+                self._feedback_label.classes(
+                    replace="text-subtitle2 q-my-xs text-red-600"
+                )
             self._update_score()
 
     def _update_score(self) -> None:
