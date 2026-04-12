@@ -1,0 +1,1 @@
+"""Piano Training application package."""
