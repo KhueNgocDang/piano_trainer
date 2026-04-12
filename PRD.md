@@ -429,15 +429,16 @@ Each milestone is a self-contained deliverable. After completing each one, devel
 **Goal:** Build the lesson system and deliver the first teaching content — what a staff is, what clefs are, and where Middle C lives.
 
 **Deliverables:**
-- [ ] Lesson data model: id, title, level, content (text + diagrams), exercises, unlock criteria.
-- [ ] Lesson list page (`/lessons`) showing all lessons with locked/unlocked states.
-- [ ] Lesson detail page with instructional content (text + inline SVG diagrams).
-- [ ] Lesson 1.1 — The Staff: interactive diagram labeling lines and spaces.
-- [ ] Lesson 1.2 — Treble Clef: line/space note mnemonics + play-to-identify exercises.
-- [ ] Lesson 1.3 — Bass Clef: same as 1.2 for bass clef (requires bass clef SVG renderer).
-- [ ] Lesson 1.4 — Grand Staff: combined staff diagram, Middle C as bridge.
-- [ ] Completion tracking: ≥ 80% accuracy on exercises to unlock next lesson.
-- [ ] SQLite database initialized on first run, stores lesson progress.
+- [x] Lesson data model: id, title, level, content (text + diagrams), exercises, unlock criteria.
+- [x] Lesson list page (`/lessons`) showing all lessons with locked/unlocked states.
+- [x] Lesson detail page with instructional content (text + inline SVG diagrams).
+- [x] Lesson 1.1 — The Staff: interactive diagram labeling lines and spaces.
+- [x] Lesson 1.2 — Treble Clef: line/space note mnemonics + play-to-identify exercises.
+- [x] Lesson 1.3 — Bass Clef: same as 1.2 for bass clef (requires bass clef SVG renderer).
+- [x] Lesson 1.4 — Grand Staff: combined staff diagram, Middle C as bridge.
+- [x] Completion tracking: ≥ 80% accuracy on exercises to unlock next lesson.
+- [x] SQLite database initialized on first run, stores lesson progress.
+- [x] Test suite: 60 new tests (182 total across models, curriculum, DB, bass/grand renderer, exercise engine, pages).
 
 **Verification checklist:**
 > 1. `/lessons` page shows Level 1 lessons. Lesson 1.1 is unlocked, rest are locked.

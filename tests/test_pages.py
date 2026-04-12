@@ -2,6 +2,8 @@
 
 from nicegui.testing import User
 
+from app.lessons import db as lesson_db
+
 
 async def test_home_page_loads(user: User):
     await user.open("/")
@@ -52,3 +54,56 @@ async def test_home_has_midi_badge(user: User):
 async def test_home_has_quick_start_buttons(user: User):
     await user.open("/")
     await user.should_see("Start Lessons")
+
+
+# ── Lesson page integration tests ────────────────────────────────
+
+
+async def test_lessons_page_shows_lesson_list(user: User):
+    await user.open("/lessons")
+    await user.should_see("Lesson 1.1")
+    await user.should_see("The Staff")
+
+
+async def test_lessons_page_shows_locked_lessons(user: User):
+    await user.open("/lessons")
+    # Lesson 1.2 should be visible but locked (no progress)
+    await user.should_see("Lesson 1.2")
+    await user.should_see("Treble Clef")
+
+
+async def test_lesson_detail_page_loads(user: User):
+    await user.open("/lessons/1.1")
+    await user.should_see("Lesson 1.1")
+    await user.should_see("The Musical Staff")
+
+
+async def test_lesson_detail_has_exercise(user: User):
+    await user.open("/lessons/1.1")
+    await user.should_see("Exercise")
+    await user.should_see("Start Exercise")
+
+
+async def test_lesson_detail_has_keyboard(user: User):
+    await user.open("/lessons/1.1")
+    await user.should_see("Your Keyboard")
+
+
+async def test_lesson_detail_has_back_button(user: User):
+    await user.open("/lessons/1.1")
+    await user.should_see("Back to Lessons")
+
+
+async def test_lesson_detail_not_found(user: User):
+    await user.open("/lessons/99.99")
+    await user.should_see("not found")
+
+
+async def test_lesson_1_3_bass_clef(user: User):
+    await user.open("/lessons/1.3")
+    await user.should_see("Bass Clef")
+
+
+async def test_lesson_1_4_grand_staff(user: User):
+    await user.open("/lessons/1.4")
+    await user.should_see("Grand Staff")

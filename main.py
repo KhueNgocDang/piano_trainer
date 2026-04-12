@@ -8,6 +8,7 @@ from nicegui import ui
 
 from app.layout import create_layout
 from app.pages import home, lessons, practice, flashcards, progress, settings
+from app.pages import lesson_detail
 
 
 @ui.page("/")
@@ -17,9 +18,15 @@ def page_home():
 
 
 @ui.page("/lessons")
-def page_lessons():
+async def page_lessons():
     with create_layout("Lessons") as midi:
-        lessons.content(midi)
+        await lessons.content(midi)
+
+
+@ui.page("/lessons/{lesson_id}")
+async def page_lesson_detail(lesson_id: str):
+    with create_layout("Lesson") as midi:
+        await lesson_detail.content(midi, lesson_id)
 
 
 @ui.page("/practice")
