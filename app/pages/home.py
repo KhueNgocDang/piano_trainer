@@ -2,6 +2,7 @@
 
 from nicegui import ui
 
+from app.keyboard.renderer import create_keyboard
 from app.midi.bridge import MidiBridge
 
 
@@ -34,3 +35,7 @@ to read sheet music from scratch.
             icon="piano",
             on_click=lambda: ui.navigate.to("/practice"),
         ).props("size=lg color=secondary outline")
+
+    ui.separator()
+    ui.label("Your Keyboard").classes("text-h6")
+    create_keyboard()

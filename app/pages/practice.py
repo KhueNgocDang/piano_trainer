@@ -1,11 +1,14 @@
-"""Practice page — placeholder for Milestone 1."""
+"""Practice page — interactive keyboard for free play."""
 
 from nicegui import ui
 
+from app.keyboard.renderer import create_keyboard
 from app.midi.bridge import MidiBridge
 
 
 def content(midi: MidiBridge) -> None:
-    ui.label("Practice mode will be available in a future milestone.").classes(
-        "text-grey-7"
+    ui.markdown(
+        "Play your piano and watch the keys light up below. "
+        "Structured practice exercises will be added in a future milestone."
     )
+    create_keyboard()

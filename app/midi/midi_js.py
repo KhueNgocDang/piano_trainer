@@ -23,14 +23,26 @@ MIDI_JS = """
         el.dispatchEvent(new CustomEvent(eventName, { bubbles: true, detail: detail }));
     }
 
+    // --- Keyboard highlight helpers ---
+    function highlightKey(note) {
+        const el = document.getElementById('piano-key-' + note);
+        if (el) el.setAttribute('fill', el.dataset.activeColor);
+    }
+    function unhighlightKey(note) {
+        const el = document.getElementById('piano-key-' + note);
+        if (el) el.setAttribute('fill', el.dataset.defaultColor);
+    }
+
     // --- MIDI message handler ---
     function onMIDIMessage(event) {
         const [status, note, velocity] = event.data;
         const command = status & 0xF0;
 
         if (command === 0x90 && velocity > 0) {
+            highlightKey(note);
             fireBridge('midi-note-on', { note: note, velocity: velocity, name: midiToName(note) });
         } else if (command === 0x80 || (command === 0x90 && velocity === 0)) {
+            unhighlightKey(note);
             fireBridge('midi-note-off', { note: note, name: midiToName(note) });
         }
     }
