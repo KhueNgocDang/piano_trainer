@@ -15,8 +15,14 @@ async def content(midi: MidiBridge, lesson_id: str) -> None:
     """Render a single lesson's detail page."""
     lesson = LESSON_BY_ID.get(lesson_id)
     if lesson is None:
-        ui.label(f"Lesson '{lesson_id}' not found.").classes("text-red-600 text-h6")
-        ui.button("Back to Lessons", icon="arrow_back", on_click=lambda: ui.navigate.to("/lessons"))
+        ui.label(f"Lesson '{lesson_id}' not found.").classes(
+            "text-red-600 text-h6"
+        )
+        ui.button(
+            "Back to Lessons",
+            icon="arrow_back",
+            on_click=lambda: ui.navigate.to("/lessons"),
+        )
         return
 
     progress = await get_progress(lesson_id)
@@ -41,6 +47,7 @@ async def content(midi: MidiBridge, lesson_id: str) -> None:
     if lesson.exercises:
         ui.separator()
         for i, exercise in enumerate(lesson.exercises):
+
             async def _on_complete(score: float, passed: bool, lid=lesson_id):
                 await save_attempt(lid, score, passed)
                 if passed:

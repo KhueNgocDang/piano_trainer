@@ -11,7 +11,11 @@ from pathlib import Path
 
 import aiosqlite
 
-_DB_DIR = Path(os.environ.get("PIANO_DB_DIR", Path(__file__).resolve().parent.parent.parent / "db"))
+_DB_DIR = Path(
+    os.environ.get(
+        "PIANO_DB_DIR", Path(__file__).resolve().parent.parent.parent / "db"
+    )
+)
 _DB_PATH = _DB_DIR / "progress.db"
 
 _SCHEMA = """\

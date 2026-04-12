@@ -20,9 +20,7 @@ _CENTER_KEYS = (60, 62, 64, 65, 67)
 _ONE_OCTAVE_KEYS = (60, 62, 64, 65, 67, 69, 71)
 
 # Two octaves: C3–B4
-_TWO_OCTAVE_KEYS = tuple(
-    m for m in range(48, 72) if not is_black_key(m)
-)
+_TWO_OCTAVE_KEYS = tuple(m for m in range(48, 72) if not is_black_key(m))
 
 LESSON_0_1 = Lesson(
     id="0.1",
@@ -175,18 +173,14 @@ _TREBLE_LINE_NOTES = (64, 67, 71, 74, 77)
 # Treble space notes: F4(65), A4(69), C5(72), E5(76)
 _TREBLE_SPACE_NOTES = (65, 69, 72, 76)
 # All treble staff notes (no ledger lines): E4–F5
-_TREBLE_STAFF_NOTES = tuple(
-    m for m in range(64, 78) if not is_black_key(m)
-)
+_TREBLE_STAFF_NOTES = tuple(m for m in range(64, 78) if not is_black_key(m))
 
 # Bass line notes: G2(43), B2(47), D3(50), F3(53), A3(57)
 _BASS_LINE_NOTES = (43, 47, 50, 53, 57)
 # Bass space notes: A2(45), C3(48), E3(52), G3(55)
 _BASS_SPACE_NOTES = (45, 48, 52, 55)
 # All bass staff notes (no ledger lines): G2–A3
-_BASS_STAFF_NOTES = tuple(
-    m for m in range(43, 58) if not is_black_key(m)
-)
+_BASS_STAFF_NOTES = tuple(m for m in range(43, 58) if not is_black_key(m))
 
 # Middle C for grand staff lesson
 _MIDDLE_C = (60,)

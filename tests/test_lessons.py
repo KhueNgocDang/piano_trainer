@@ -46,6 +46,7 @@ from app.staff.renderer import (
 # Lesson Models
 # ═══════════════════════════════════════════════════════════════════
 
+
 class TestLessonModels:
     def test_clef_enum(self):
         assert Clef.TREBLE.value == "treble"
@@ -58,7 +59,12 @@ class TestLessonModels:
         assert ex.pass_threshold == 0.80
 
     def test_exercise_custom(self):
-        ex = Exercise(clef=Clef.BASS, note_pool=(43, 45), num_notes=5, pass_threshold=0.70)
+        ex = Exercise(
+            clef=Clef.BASS,
+            note_pool=(43, 45),
+            num_notes=5,
+            pass_threshold=0.70,
+        )
         assert ex.num_notes == 5
         assert ex.pass_threshold == 0.70
 
@@ -83,6 +89,7 @@ class TestLessonModels:
 # ═══════════════════════════════════════════════════════════════════
 # Curriculum
 # ═══════════════════════════════════════════════════════════════════
+
 
 class TestCurriculum:
     def test_all_lessons_count(self):
@@ -179,6 +186,7 @@ class TestCurriculum:
 # Database
 # ═══════════════════════════════════════════════════════════════════
 
+
 @pytest.fixture
 def tmp_db(monkeypatch, tmp_path):
     """Use a temporary directory for the database."""
@@ -207,7 +215,9 @@ class TestDatabase:
     async def test_multiple_attempts_keeps_best(self, tmp_db):
         await lesson_db.save_attempt("1.1", 0.60, False)
         await lesson_db.save_attempt("1.1", 0.90, True)
-        await lesson_db.save_attempt("1.1", 0.70, False)  # lower score, already completed
+        await lesson_db.save_attempt(
+            "1.1", 0.70, False
+        )  # lower score, already completed
         result = await lesson_db.get_progress("1.1")
         assert result["best_score"] == 0.90
         assert result["attempts"] == 3
@@ -234,6 +244,7 @@ class TestDatabase:
 # ═══════════════════════════════════════════════════════════════════
 # Bass Clef Renderer
 # ═══════════════════════════════════════════════════════════════════
+
 
 class TestBassClefRenderer:
     def test_d3_on_line_3(self):
@@ -299,6 +310,7 @@ class TestBassClefRenderer:
 # ═══════════════════════════════════════════════════════════════════
 # Grand Staff Renderer
 # ═══════════════════════════════════════════════════════════════════
+
 
 class TestGrandStaffRenderer:
     def test_treble_note_position(self):
@@ -367,6 +379,7 @@ class TestGrandStaffRenderer:
 # ═══════════════════════════════════════════════════════════════════
 # Exercise State
 # ═══════════════════════════════════════════════════════════════════
+
 
 class TestExerciseState:
     def test_generate_sequence(self):

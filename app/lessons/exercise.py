@@ -90,7 +90,9 @@ class ExerciseState:
 class LessonExercise:
     """NiceGUI component for an interactive lesson exercise."""
 
-    def __init__(self, exercise: Exercise, midi_bridge, on_complete=None) -> None:
+    def __init__(
+        self, exercise: Exercise, midi_bridge, on_complete=None
+    ) -> None:
         self._exercise = exercise
         self._bridge = midi_bridge
         self._on_complete = on_complete  # callback(score: float, passed: bool)
@@ -224,7 +226,9 @@ class LessonExercise:
             ui.run_javascript(f"resetPianoKey({target})")
             ui.run_javascript(f"flashPianoKey({note}, '#4CAF50', 400)")
             if self._played_label:
-                self._played_label.classes(replace="text-h5 font-bold text-green-600")
+                self._played_label.classes(
+                    replace="text-h5 font-bold text-green-600"
+                )
             if self._feedback_label:
                 self._feedback_label.text = "✓ Correct!"
                 self._feedback_label.classes(
@@ -236,7 +240,9 @@ class LessonExercise:
             self._state.misses += 1
             ui.run_javascript(f"flashPianoKey({note}, '#F44336', 600)")
             if self._played_label:
-                self._played_label.classes(replace="text-h5 font-bold text-red-600")
+                self._played_label.classes(
+                    replace="text-h5 font-bold text-red-600"
+                )
             if self._feedback_label:
                 target_name = midi_to_note_name(target)
                 self._feedback_label.text = f"✗ Wrong — play {target_name}"
@@ -274,9 +280,7 @@ class LessonExercise:
                     replace="text-h6 font-bold q-ml-md text-green-600"
                 )
             else:
-                self._feedback_label.text = (
-                    f"Score: {pct}% — need ≥{threshold_pct}% to pass. Try again!"
-                )
+                self._feedback_label.text = f"Score: {pct}% — need ≥{threshold_pct}% to pass. Try again!"
                 self._feedback_label.classes(
                     replace="text-h6 font-bold q-ml-md text-orange-700"
                 )
@@ -284,7 +288,9 @@ class LessonExercise:
         if self._target_label:
             self._target_label.text = "—"
         if self._start_btn:
-            self._start_btn.text = "Retry Exercise" if not passed else "Play Again"
+            self._start_btn.text = (
+                "Retry Exercise" if not passed else "Play Again"
+            )
             self._start_btn.visible = True
 
         if self._on_complete:

@@ -173,10 +173,13 @@ class TestRenderSVG:
     def test_all_white_keys_labeled(self, svg):
         """Every white key should have a note name label."""
         from app.keyboard.renderer import midi_note_name
+
         for midi in range(21, 109):
             if not is_black_key(midi):
                 name = midi_note_name(midi)
-                assert f">{name}</text>" in svg, f"Missing label for {name} (MIDI {midi})"
+                assert (
+                    f">{name}</text>" in svg
+                ), f"Missing label for {name} (MIDI {midi})"
 
     def test_c_notes_bold(self, svg):
         """C notes should have bold labels."""

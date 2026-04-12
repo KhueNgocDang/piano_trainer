@@ -254,7 +254,9 @@ def render_staff_svg(
 # Bass clef reference: D3 sits on line 3.
 # D3 = MIDI 50, diatonic absolute = 3*7+1 = 22
 _D3_MIDI = 50
-_D3_Y = STAFF_TOP + 2 * LINE_SPACING  # same y-position as B4 in treble (line 3)
+_D3_Y = (
+    STAFF_TOP + 2 * LINE_SPACING
+)  # same y-position as B4 in treble (line 3)
 
 
 def _midi_to_diatonic_steps_from_d3(midi: int) -> int | None:
@@ -404,7 +406,9 @@ def render_bass_staff_svg(
 GRAND_STAFF_HEIGHT = 320
 GRAND_TREBLE_TOP = 30  # y of treble staff top line
 GRAND_BASS_TOP = 190  # y of bass staff top line
-GRAND_STAFF_GAP = GRAND_BASS_TOP - (GRAND_TREBLE_TOP + 4 * LINE_SPACING)  # gap between staves
+GRAND_STAFF_GAP = GRAND_BASS_TOP - (
+    GRAND_TREBLE_TOP + 4 * LINE_SPACING
+)  # gap between staves
 
 
 def _grand_treble_line_ys() -> list[float]:
@@ -505,13 +509,17 @@ def render_grand_staff_svg(
     treble_lines = _grand_treble_line_ys()
     tcx = STAFF_LEFT - 35
     tcy = treble_lines[3]
-    parts.append(_TREBLE_CLEF_SVG.replace("{cx}", f"{tcx}").replace("{cy}", f"{tcy}"))
+    parts.append(
+        _TREBLE_CLEF_SVG.replace("{cx}", f"{tcx}").replace("{cy}", f"{tcy}")
+    )
 
     # Bass clef (on line 4 = index 1 of bass)
     bass_lines = _grand_bass_line_ys()
     bcx = STAFF_LEFT - 28
     bcy = bass_lines[1]
-    parts.append(_BASS_CLEF_SVG.replace("{cx}", f"{bcx}").replace("{cy}", f"{bcy}"))
+    parts.append(
+        _BASS_CLEF_SVG.replace("{cx}", f"{bcx}").replace("{cy}", f"{bcy}")
+    )
 
     # Brace (left vertical line connecting both staves)
     brace_top = treble_lines[0]

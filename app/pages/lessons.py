@@ -28,21 +28,26 @@ async def content(midi: MidiBridge) -> None:
         attempts = progress.get(lesson.id, {}).get("attempts", 0)
 
         with ui.card().classes(
-            "w-full p-4 " + ("bg-white" if unlocked else "bg-grey-3 opacity-70")
+            "w-full p-4 "
+            + ("bg-white" if unlocked else "bg-grey-3 opacity-70")
         ):
             with ui.row().classes("items-center justify-between w-full"):
                 with ui.row().classes("items-center gap-3"):
                     if completed:
-                        ui.icon("check_circle", color="green").classes("text-2xl")
-                    elif unlocked:
-                        ui.icon("radio_button_unchecked", color="blue").classes(
+                        ui.icon("check_circle", color="green").classes(
                             "text-2xl"
                         )
+                    elif unlocked:
+                        ui.icon(
+                            "radio_button_unchecked", color="blue"
+                        ).classes("text-2xl")
                     else:
                         ui.icon("lock", color="grey").classes("text-2xl")
 
                     with ui.column().classes("gap-0"):
-                        ui.label(f"Lesson {lesson.id}: {lesson.title}").classes(
+                        ui.label(
+                            f"Lesson {lesson.id}: {lesson.title}"
+                        ).classes(
                             "text-h6 " + ("" if unlocked else "text-grey-5")
                         )
                         ui.label(lesson.description).classes(
@@ -61,7 +66,9 @@ async def content(midi: MidiBridge) -> None:
                             f"/lessons/{lid}"
                         ),
                     ).props(
-                        "color=primary" if not completed else "color=green outline"
+                        "color=primary"
+                        if not completed
+                        else "color=green outline"
                     )
 
 
