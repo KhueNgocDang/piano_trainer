@@ -465,17 +465,20 @@ Each milestone is a self-contained deliverable. After completing each one, devel
 
 ---
 
-#### Milestone 5 — Levels 2 & 3 (Note Identification — Treble & Bass)
+#### Milestone 5 — Levels 2 & 3 (Note Identification — Treble & Bass) ✅ COMPLETE
 
 **Goal:** User can identify and play individual notes across the full treble and bass clef ranges.
 
 **Deliverables:**
-- [ ] Lessons 2.1–2.5: progressive treble clef note identification (C4→C6, then ledger lines, then mixed review).
-- [ ] Lessons 3.1–3.5: progressive bass clef note identification (C4→C2, then ledger lines, then mixed review).
-- [ ] Each lesson introduces 2–3 new notes, with exercises restricted to only learned notes.
-- [ ] Keyboard "active zone" highlighting: during a lesson, dim keys outside the exercise range.
-- [ ] Accuracy displayed per lesson attempt. Best score saved.
-- [ ] "Retry" button to redo a lesson.
+- [x] Lessons 2.1–2.5: progressive treble clef note identification (B3→A5, including ledger lines and mixed review).
+- [x] Lessons 3.1–3.5: progressive bass clef note identification (C4→E2, including ledger lines and mixed review).
+- [x] Each lesson introduces 2–3 new notes, with exercises restricted to only learned notes (cumulative pools).
+- [x] Keyboard "active zone" highlighting: `setActiveZone(min, max)` dims keys outside the exercise range; `clearActiveZone()` restores on finish.
+- [x] Accuracy displayed per lesson attempt. Best score saved.
+- [x] "Retry" button to redo a lesson.
+- [x] Lessons page grouped by level with section headers.
+- [x] Full prerequisite chain: 0.1→…→1.4→2.1→…→2.5→3.1→…→3.5 (17 lessons).
+- [x] Test suite: 28 new tests (221 total).
 
 **Verification checklist:**
 > 1. Lesson 2.1 only asks for Middle C, D, E — no other notes appear.
