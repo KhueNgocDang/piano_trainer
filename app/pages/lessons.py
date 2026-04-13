@@ -61,7 +61,8 @@ async def content(midi: MidiBridge) -> None:
                             ui.label(
                                 f"Lesson {lesson.id}: {lesson.title}"
                             ).classes(
-                                "text-h6 " + ("" if unlocked else "text-grey-5")
+                                "text-h6 "
+                                + ("" if unlocked else "text-grey-5")
                             )
                             ui.label(lesson.description).classes(
                                 "text-body2 text-grey-7"

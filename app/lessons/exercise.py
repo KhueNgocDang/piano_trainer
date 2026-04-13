@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import asyncio
+import inspect
 import random
 from dataclasses import dataclass, field
 
@@ -320,4 +322,6 @@ class LessonExercise:
             self._start_btn.visible = True
 
         if self._on_complete:
-            self._on_complete(score, passed)
+            result = self._on_complete(score, passed)
+            if inspect.isawaitable(result):
+                asyncio.ensure_future(result)
