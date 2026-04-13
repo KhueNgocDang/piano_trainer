@@ -2,12 +2,11 @@
 
 from __future__ import annotations
 
-import asyncio
 import inspect
 import random
 from dataclasses import dataclass, field
 
-from nicegui import ui
+from nicegui import background_tasks, ui
 
 from app.keyboard.renderer import is_black_key
 from app.lessons.models import Clef, Exercise
@@ -324,4 +323,4 @@ class LessonExercise:
         if self._on_complete:
             result = self._on_complete(score, passed)
             if inspect.isawaitable(result):
-                asyncio.ensure_future(result)
+                background_tasks.create(result)
