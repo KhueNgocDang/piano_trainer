@@ -119,3 +119,54 @@ async def test_lesson_0_1_keyboard_basics(user: User):
     await user.open("/lessons/0.1")
     await user.should_see("The Piano Keyboard")
     await user.should_see("Musical Alphabet")
+
+
+# ── Level 2 & 3 page integration tests ───────────────────────────
+
+
+async def test_lessons_page_shows_level_headers(user: User):
+    await user.open("/lessons")
+    await user.should_see("Level 0")
+    await user.should_see("Level 1")
+    await user.should_see("Level 2")
+    await user.should_see("Level 3")
+
+
+async def test_lessons_page_shows_level_2(user: User):
+    await user.open("/lessons")
+    await user.should_see("Lesson 2.1")
+    await user.should_see("Middle C, D, E")
+
+
+async def test_lessons_page_shows_level_3(user: User):
+    await user.open("/lessons")
+    await user.should_see("Lesson 3.1")
+    await user.should_see("Bass Clef")
+
+
+async def test_lesson_2_1_detail(user: User):
+    await user.open("/lessons/2.1")
+    await user.should_see("Lesson 2.1")
+    await user.should_see("Middle C, D, E")
+    await user.should_see("Exercise")
+
+
+async def test_lesson_2_4_ledger_lines(user: User):
+    await user.open("/lessons/2.4")
+    await user.should_see("Ledger Lines")
+
+
+async def test_lesson_2_5_review(user: User):
+    await user.open("/lessons/2.5")
+    await user.should_see("Mixed Review")
+
+
+async def test_lesson_3_1_detail(user: User):
+    await user.open("/lessons/3.1")
+    await user.should_see("Lesson 3.1")
+    await user.should_see("Bass Clef")
+
+
+async def test_lesson_3_5_review(user: User):
+    await user.open("/lessons/3.5")
+    await user.should_see("Mixed Review")

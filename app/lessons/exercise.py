@@ -44,6 +44,24 @@ FLASH_JS = """
         if (!el) return;
         el.setAttribute('fill', el.dataset.defaultColor);
     };
+
+    window.setActiveZone = function(minMidi, maxMidi) {
+        document.querySelectorAll('[id^="piano-key-"]').forEach(el => {
+            const midi = parseInt(el.id.replace('piano-key-', ''), 10);
+            if (isNaN(midi)) return;
+            if (midi >= minMidi && midi <= maxMidi) {
+                el.style.opacity = '1.0';
+            } else {
+                el.style.opacity = '0.25';
+            }
+        });
+    };
+
+    window.clearActiveZone = function() {
+        document.querySelectorAll('[id^="piano-key-"]').forEach(el => {
+            el.style.opacity = '1.0';
+        });
+    };
 })();
 """
 
@@ -194,6 +212,11 @@ class LessonExercise:
         self._next_note()
         self._bridge.on_note_callback = self._on_note
 
+        # Dim keys outside the exercise note pool range
+        pool = self._exercise.note_pool
+        if pool:
+            ui.run_javascript(f"setActiveZone({min(pool)}, {max(pool)})")
+
     def _next_note(self) -> None:
         """Show the next note or finish."""
         if self._state.target_midi:
@@ -267,6 +290,9 @@ class LessonExercise:
         self._bridge.on_note_callback = None
         if self._state.target_midi:
             ui.run_javascript(f"resetPianoKey({self._state.target_midi})")
+
+        # Restore full keyboard visibility
+        ui.run_javascript("clearActiveZone()")
 
         score = self._state.score
         passed = score >= self._exercise.pass_threshold

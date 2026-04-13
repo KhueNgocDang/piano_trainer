@@ -2,6 +2,8 @@
 
 Level 0: The Piano Keyboard (fundamentals)
 Level 1: The Staff & Clefs (1.1–1.4)
+Level 2: Note Identification — Treble Clef (2.1–2.5)
+Level 3: Note Identification — Bass Clef (3.1–3.5)
 """
 
 from __future__ import annotations
@@ -349,6 +351,425 @@ LEVEL_1_LESSONS: tuple[Lesson, ...] = (
     LESSON_1_4,
 )
 
-ALL_LESSONS: tuple[Lesson, ...] = LEVEL_0_LESSONS + LEVEL_1_LESSONS
+# ══════════════════════════════════════════════════════════════════
+# Level 2 — Note Identification (Treble Clef)
+# ══════════════════════════════════════════════════════════════════
+
+# Progressive note pools (cumulative — each lesson adds new notes)
+_L2_POOL_1 = (60, 62, 64)  # C4, D4, E4
+_L2_POOL_2 = (60, 62, 64, 65, 67)  # + F4, G4
+_L2_POOL_3 = (60, 62, 64, 65, 67, 69, 71, 72)  # + A4, B4, C5
+_L2_POOL_4 = (59, 60, 62, 64, 65, 67, 69, 71, 72, 74, 76, 77)  # + B3, D5, E5, F5
+_L2_POOL_5 = (59, 60, 62, 64, 65, 67, 69, 71, 72, 74, 76, 77, 79, 81)  # + G5, A5
+
+LESSON_2_1 = Lesson(
+    id="2.1",
+    title="Middle C, D, E",
+    level=2,
+    description="Start reading treble clef — identify C4, D4, and E4 on the staff.",
+    content_md="""\
+## Reading Notes: Middle C, D, E
+
+Now that you know the staff and the treble clef, let's start reading actual notes!
+
+We'll begin with three notes near **Middle C**:
+
+| Note | MIDI | Position on Staff |
+|------|------|-------------------|
+| **C4** | 60 | On a **ledger line** just below the staff |
+| **D4** | 62 | In the **space** just below line 1 |
+| **E4** | 64 | On **line 1** (the bottom line) |
+
+### Tips
+- **C4** has its own short line — this is called a *ledger line*
+- **D4** floats in the space between C4's ledger line and line 1
+- **E4** sits right on the bottom line of the staff
+
+Look at where the note sits on the staff, then play the matching key!
+
+### Exercise
+A note will appear on the treble staff. Play the correct key on your piano. \
+Only C4, D4, and E4 will appear.
+""",
+    exercises=(
+        Exercise(
+            clef=Clef.TREBLE,
+            note_pool=_L2_POOL_1,
+            num_notes=10,
+            pass_threshold=0.80,
+        ),
+    ),
+    prerequisite_id="1.4",
+)
+
+LESSON_2_2 = Lesson(
+    id="2.2",
+    title="Adding F and G",
+    level=2,
+    description="Expand your range upward — add F4 and G4.",
+    content_md="""\
+## Adding F and G
+
+Two more notes on the treble staff:
+
+| Note | MIDI | Position on Staff |
+|------|------|-------------------|
+| **F4** | 65 | In the **space** between lines 1 and 2 |
+| **G4** | 67 | On **line 2** |
+
+### How to tell them apart
+- **F4** floats in the first space (just above line 1 / E4)
+- **G4** sits on line 2 — the line that the treble clef curls around!
+
+You now know 5 notes: **C4, D4, E4, F4, G4** — the first five notes of the C major scale.
+
+### Exercise
+Notes from C4 through G4 will appear. Play each one!
+""",
+    exercises=(
+        Exercise(
+            clef=Clef.TREBLE,
+            note_pool=_L2_POOL_2,
+            num_notes=10,
+            pass_threshold=0.80,
+        ),
+    ),
+    prerequisite_id="2.1",
+)
+
+LESSON_2_3 = Lesson(
+    id="2.3",
+    title="A, B, and High C — One Octave",
+    level=2,
+    description="Complete the octave from C4 to C5.",
+    content_md="""\
+## Completing the Octave: A, B, C5
+
+Three more notes bring you to a full octave:
+
+| Note | MIDI | Position on Staff |
+|------|------|-------------------|
+| **A4** | 69 | In the **space** between lines 2 and 3 |
+| **B4** | 71 | On **line 3** (the middle line) |
+| **C5** | 72 | In the **space** between lines 3 and 4 |
+
+### Pattern recognition
+- Spaces spell **F–A–C–E** from bottom to top
+- Lines go **E–G–B–D–F** from bottom to top
+- B4 on line 3 is the exact middle of the staff!
+
+You can now read one full octave on the treble staff: **C4 → C5**.
+
+### Exercise
+Any note from C4 to C5 may appear. Play them all!
+""",
+    exercises=(
+        Exercise(
+            clef=Clef.TREBLE,
+            note_pool=_L2_POOL_3,
+            num_notes=12,
+            pass_threshold=0.80,
+        ),
+    ),
+    prerequisite_id="2.2",
+)
+
+LESSON_2_4 = Lesson(
+    id="2.4",
+    title="Ledger Lines & Upper Staff",
+    level=2,
+    description="Extend your range — notes below and at the top of the staff.",
+    content_md="""\
+## Ledger Lines & The Full Staff
+
+Notes can go **beyond** the five staff lines using short extra lines called \
+**ledger lines**. You've already been playing C4, which sits on a ledger line!
+
+### New notes below the staff
+| Note | MIDI | Position |
+|------|------|----------|
+| **B3** | 59 | Space **below** C4's ledger line |
+
+### New notes at the top of the staff
+| Note | MIDI | Position |
+|------|------|----------|
+| **D5** | 74 | On **line 4** |
+| **E5** | 76 | In the **space** between lines 4 and 5 |
+| **F5** | 77 | On **line 5** (the top line) |
+
+### Tips
+- B3 is the note just below Middle C — look for notes sitting below the ledger line
+- D5 and F5 are on the top two lines of the staff
+- E5 is in the space between them
+
+Your range now spans from B3 to F5 — almost the entire treble staff!
+
+### Exercise
+Notes from B3 to F5 will appear. Watch for notes above and below the main staff lines!
+""",
+    exercises=(
+        Exercise(
+            clef=Clef.TREBLE,
+            note_pool=_L2_POOL_4,
+            num_notes=15,
+            pass_threshold=0.80,
+        ),
+    ),
+    prerequisite_id="2.3",
+)
+
+LESSON_2_5 = Lesson(
+    id="2.5",
+    title="Treble Clef — Mixed Review",
+    level=2,
+    description="Random notes across the full treble clef range, including ledger lines.",
+    content_md="""\
+## Treble Clef Mixed Review
+
+Time to put it all together! You'll see notes from the **full treble clef range**, \
+including ledger lines above and below the staff.
+
+### Two new notes above the staff
+| Note | MIDI | Position |
+|------|------|----------|
+| **G5** | 79 | **Space** just above line 5 |
+| **A5** | 81 | On a **ledger line** above the staff |
+
+### Your full range: B3 → A5
+That's **14 natural notes** spanning nearly two octaves!
+
+### Strategy tips
+- Start from landmark notes you know well: **Middle C (C4)**, **B4 (line 3)**, **F5 (line 5)**
+- Count steps from the nearest landmark
+- Notes above/below the staff always use ledger lines — count them carefully
+
+### Exercise
+Random notes from B3 to A5. This is the most challenging treble clef drill yet!
+""",
+    exercises=(
+        Exercise(
+            clef=Clef.TREBLE,
+            note_pool=_L2_POOL_5,
+            num_notes=20,
+            pass_threshold=0.80,
+        ),
+    ),
+    prerequisite_id="2.4",
+)
+
+LEVEL_2_LESSONS: tuple[Lesson, ...] = (
+    LESSON_2_1,
+    LESSON_2_2,
+    LESSON_2_3,
+    LESSON_2_4,
+    LESSON_2_5,
+)
+
+# ══════════════════════════════════════════════════════════════════
+# Level 3 — Note Identification (Bass Clef)
+# ══════════════════════════════════════════════════════════════════
+
+# Progressive note pools (starting from top of bass staff, expanding downward)
+_L3_POOL_1 = (57, 59, 60)  # A3, B3, C4
+_L3_POOL_2 = (53, 55, 57, 59, 60)  # + F3, G3
+_L3_POOL_3 = (48, 50, 52, 53, 55, 57, 59, 60)  # + C3, D3, E3
+_L3_POOL_4 = (41, 43, 45, 47, 48, 50, 52, 53, 55, 57, 59, 60)  # + F2, G2, A2, B2
+_L3_POOL_5 = (40, 41, 43, 45, 47, 48, 50, 52, 53, 55, 57, 59, 60)  # + E2
+
+LESSON_3_1 = Lesson(
+    id="3.1",
+    title="Middle C, B, A (Bass Clef)",
+    level=3,
+    description="Start reading bass clef — C4, B3, and A3 around the top of the staff.",
+    content_md="""\
+## Bass Clef: Starting from the Top
+
+Welcome to the bass clef! We'll start from notes you already know — near **Middle C** — \
+but now reading them in the **bass clef** 𝄢.
+
+| Note | MIDI | Position on Bass Staff |
+|------|------|------------------------|
+| **C4** | 60 | On a **ledger line** just above the staff |
+| **B3** | 59 | In the **space** just above line 5 |
+| **A3** | 57 | On **line 5** (the top line) |
+
+### Key difference from treble clef
+In treble clef, C4 was below the staff. In bass clef, C4 is **above** the staff! \
+Same note, same key on the piano, but written in a different position.
+
+### Exercise
+Notes will appear on the **bass clef** staff. Play C4, B3, or A3 as shown!
+""",
+    exercises=(
+        Exercise(
+            clef=Clef.BASS,
+            note_pool=_L3_POOL_1,
+            num_notes=10,
+            pass_threshold=0.80,
+        ),
+    ),
+    prerequisite_id="2.5",
+)
+
+LESSON_3_2 = Lesson(
+    id="3.2",
+    title="Adding G and F (Bass Clef)",
+    level=3,
+    description="Expand downward — add G3 and F3.",
+    content_md="""\
+## Bass Clef: G3 and F3
+
+Two more notes, moving down the bass staff:
+
+| Note | MIDI | Position on Bass Staff |
+|------|------|------------------------|
+| **G3** | 55 | In the **space** between lines 4 and 5 |
+| **F3** | 53 | On **line 4** — the line the bass clef's dots surround! |
+
+### Bass clef landmark
+**F3 on line 4** is the bass clef's anchor note — just like G4 on line 2 is the \
+treble clef's anchor. The two dots of the 𝄢 symbol sit above and below this line.
+
+### Exercise
+Notes from F3 to C4 will appear on the bass staff.
+""",
+    exercises=(
+        Exercise(
+            clef=Clef.BASS,
+            note_pool=_L3_POOL_2,
+            num_notes=10,
+            pass_threshold=0.80,
+        ),
+    ),
+    prerequisite_id="3.1",
+)
+
+LESSON_3_3 = Lesson(
+    id="3.3",
+    title="E, D, C — Bass Clef Center",
+    level=3,
+    description="Learn the middle of the bass staff — E3, D3, and C3.",
+    content_md="""\
+## Bass Clef: E3, D3, C3
+
+The center of the bass staff:
+
+| Note | MIDI | Position on Bass Staff |
+|------|------|------------------------|
+| **E3** | 52 | In the **space** between lines 3 and 4 |
+| **D3** | 50 | On **line 3** (the middle line) |
+| **C3** | 48 | In the **space** between lines 2 and 3 |
+
+### Mnemonics reminder
+- Bass clef spaces (bottom to top): **A–C–E–G** → *All Cows Eat Grass*
+- Bass clef lines (bottom to top): **G–B–D–F–A** → *Good Boys Do Fine Always*
+
+D3 on line 3 is the exact middle of the bass staff — a good landmark!
+
+### Exercise
+Notes from C3 to C4 — the full octave on the bass staff.
+""",
+    exercises=(
+        Exercise(
+            clef=Clef.BASS,
+            note_pool=_L3_POOL_3,
+            num_notes=12,
+            pass_threshold=0.80,
+        ),
+    ),
+    prerequisite_id="3.2",
+)
+
+LESSON_3_4 = Lesson(
+    id="3.4",
+    title="Bottom of Staff & Ledger Lines",
+    level=3,
+    description="Reach the bottom of the bass staff and learn a ledger line below.",
+    content_md="""\
+## Bottom of the Bass Staff
+
+Let's complete the bass staff and go below it:
+
+### Remaining staff notes
+| Note | MIDI | Position on Bass Staff |
+|------|------|------------------------|
+| **B2** | 47 | On **line 2** |
+| **A2** | 45 | In the **space** between lines 1 and 2 |
+| **G2** | 43 | On **line 1** (the bottom line) |
+
+### Ledger line below the staff
+| Note | MIDI | Position |
+|------|------|----------|
+| **F2** | 41 | In the **space** just below line 1 |
+
+### Tips
+- G2 on line 1 is the lowest note directly on the staff
+- F2 is just below — it floats in the space under line 1
+- Count carefully from D3 (line 3) or G2 (line 1) as landmarks
+
+### Exercise
+Notes from F2 to C4 — nearly the full bass range!
+""",
+    exercises=(
+        Exercise(
+            clef=Clef.BASS,
+            note_pool=_L3_POOL_4,
+            num_notes=15,
+            pass_threshold=0.80,
+        ),
+    ),
+    prerequisite_id="3.3",
+)
+
+LESSON_3_5 = Lesson(
+    id="3.5",
+    title="Bass Clef — Mixed Review",
+    level=3,
+    description="Random notes across the full bass clef range, including ledger lines.",
+    content_md="""\
+## Bass Clef Mixed Review
+
+Time for the full bass clef range! You'll see notes from **E2 to C4**, \
+including ledger lines above and below the staff.
+
+### One more note below the staff
+| Note | MIDI | Position |
+|------|------|----------|
+| **E2** | 40 | On a **ledger line** below the staff |
+
+### Your full bass range: E2 → C4
+That's **13 natural notes** spanning nearly two octaves!
+
+### Strategy tips
+- Use **landmarks**: D3 (line 3), F3 (line 4, bass clef anchor), G2 (line 1)
+- **Above the staff**: B3 (space above line 5), C4 (ledger line)
+- **Below the staff**: F2 (space below line 1), E2 (ledger line)
+- Count steps up or down from the nearest landmark
+
+### Exercise
+Random notes from E2 to C4. The complete bass clef challenge!
+""",
+    exercises=(
+        Exercise(
+            clef=Clef.BASS,
+            note_pool=_L3_POOL_5,
+            num_notes=20,
+            pass_threshold=0.80,
+        ),
+    ),
+    prerequisite_id="3.4",
+)
+
+LEVEL_3_LESSONS: tuple[Lesson, ...] = (
+    LESSON_3_1,
+    LESSON_3_2,
+    LESSON_3_3,
+    LESSON_3_4,
+    LESSON_3_5,
+)
+
+# ── All lessons in order ──────────────────────────────────────────
+
+ALL_LESSONS: tuple[Lesson, ...] = LEVEL_0_LESSONS + LEVEL_1_LESSONS + LEVEL_2_LESSONS + LEVEL_3_LESSONS
 
 LESSON_BY_ID: dict[str, Lesson] = {lsn.id: lsn for lsn in ALL_LESSONS}

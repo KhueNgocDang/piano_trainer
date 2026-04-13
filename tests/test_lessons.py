@@ -19,9 +19,21 @@ from app.lessons.curriculum import (
     LESSON_1_2,
     LESSON_1_3,
     LESSON_1_4,
+    LESSON_2_1,
+    LESSON_2_2,
+    LESSON_2_3,
+    LESSON_2_4,
+    LESSON_2_5,
+    LESSON_3_1,
+    LESSON_3_2,
+    LESSON_3_3,
+    LESSON_3_4,
+    LESSON_3_5,
     LESSON_BY_ID,
     LEVEL_0_LESSONS,
     LEVEL_1_LESSONS,
+    LEVEL_2_LESSONS,
+    LEVEL_3_LESSONS,
 )
 from app.lessons import db as lesson_db
 from app.lessons.exercise import ExerciseState, FLASH_JS
@@ -93,10 +105,10 @@ class TestLessonModels:
 
 class TestCurriculum:
     def test_all_lessons_count(self):
-        assert len(ALL_LESSONS) == 7  # 3 Level 0 + 4 Level 1
+        assert len(ALL_LESSONS) == 17  # 3 + 4 + 5 + 5
 
-    def test_level_0_and_1_make_all(self):
-        assert ALL_LESSONS == LEVEL_0_LESSONS + LEVEL_1_LESSONS
+    def test_all_levels_make_all(self):
+        assert ALL_LESSONS == LEVEL_0_LESSONS + LEVEL_1_LESSONS + LEVEL_2_LESSONS + LEVEL_3_LESSONS
 
     def test_lesson_ids_unique(self):
         ids = [l.id for l in ALL_LESSONS]
@@ -106,6 +118,8 @@ class TestCurriculum:
         assert LESSON_BY_ID["0.1"] is LESSON_0_1
         assert LESSON_BY_ID["1.1"] is LESSON_1_1
         assert LESSON_BY_ID["1.4"] is LESSON_1_4
+        assert LESSON_BY_ID["2.1"] is LESSON_2_1
+        assert LESSON_BY_ID["3.5"] is LESSON_3_5
 
     def test_lesson_0_1_unlocked(self):
         assert LESSON_0_1.prerequisite_id is None
@@ -170,6 +184,124 @@ class TestCurriculum:
         has_bass = any(m < 60 for m in ex.note_pool)
         assert has_treble
         assert has_bass
+
+    # ── Level 2 — Treble Clef Note Identification ────────────────
+
+    def test_level_2_count(self):
+        assert len(LEVEL_2_LESSONS) == 5
+
+    def test_level_2_all_treble(self):
+        for lesson in LEVEL_2_LESSONS:
+            assert lesson.level == 2
+            for ex in lesson.exercises:
+                assert ex.clef == Clef.TREBLE
+
+    def test_level_2_prerequisite_chain(self):
+        assert LESSON_2_1.prerequisite_id == "1.4"
+        assert LESSON_2_2.prerequisite_id == "2.1"
+        assert LESSON_2_3.prerequisite_id == "2.2"
+        assert LESSON_2_4.prerequisite_id == "2.3"
+        assert LESSON_2_5.prerequisite_id == "2.4"
+
+    def test_level_2_progressive_pools(self):
+        """Each lesson's note pool should be a superset of the previous."""
+        pools = [set(l.exercises[0].note_pool) for l in LEVEL_2_LESSONS]
+        for i in range(1, len(pools)):
+            assert pools[i - 1].issubset(pools[i]), (
+                f"Lesson 2.{i} pool is not a superset of 2.{i - 1}"
+            )
+
+    def test_lesson_2_1_notes(self):
+        ex = LESSON_2_1.exercises[0]
+        assert set(ex.note_pool) == {60, 62, 64}  # C4, D4, E4
+
+    def test_lesson_2_3_octave(self):
+        ex = LESSON_2_3.exercises[0]
+        assert set(ex.note_pool) == {60, 62, 64, 65, 67, 69, 71, 72}
+
+    def test_lesson_2_4_includes_ledger_notes(self):
+        ex = LESSON_2_4.exercises[0]
+        pool = set(ex.note_pool)
+        assert 59 in pool  # B3 below staff
+        assert 77 in pool  # F5 top line
+
+    def test_lesson_2_5_full_range(self):
+        ex = LESSON_2_5.exercises[0]
+        pool = set(ex.note_pool)
+        assert 59 in pool  # B3
+        assert 81 in pool  # A5
+        assert len(pool) == 14
+        for m in pool:
+            assert not is_black_key(m)
+
+    def test_level_2_content(self):
+        for lesson in LEVEL_2_LESSONS:
+            assert len(lesson.content_md) > 50
+
+    # ── Level 3 — Bass Clef Note Identification ──────────────────
+
+    def test_level_3_count(self):
+        assert len(LEVEL_3_LESSONS) == 5
+
+    def test_level_3_all_bass(self):
+        for lesson in LEVEL_3_LESSONS:
+            assert lesson.level == 3
+            for ex in lesson.exercises:
+                assert ex.clef == Clef.BASS
+
+    def test_level_3_prerequisite_chain(self):
+        assert LESSON_3_1.prerequisite_id == "2.5"
+        assert LESSON_3_2.prerequisite_id == "3.1"
+        assert LESSON_3_3.prerequisite_id == "3.2"
+        assert LESSON_3_4.prerequisite_id == "3.3"
+        assert LESSON_3_5.prerequisite_id == "3.4"
+
+    def test_level_3_progressive_pools(self):
+        """Each lesson's note pool should be a superset of the previous."""
+        pools = [set(l.exercises[0].note_pool) for l in LEVEL_3_LESSONS]
+        for i in range(1, len(pools)):
+            assert pools[i - 1].issubset(pools[i]), (
+                f"Lesson 3.{i} pool is not a superset of 3.{i - 1}"
+            )
+
+    def test_lesson_3_1_notes(self):
+        ex = LESSON_3_1.exercises[0]
+        assert set(ex.note_pool) == {57, 59, 60}  # A3, B3, C4
+
+    def test_lesson_3_3_center(self):
+        ex = LESSON_3_3.exercises[0]
+        pool = set(ex.note_pool)
+        assert 48 in pool  # C3
+        assert 60 in pool  # C4
+
+    def test_lesson_3_4_includes_bottom(self):
+        ex = LESSON_3_4.exercises[0]
+        pool = set(ex.note_pool)
+        assert 43 in pool  # G2 (line 1)
+        assert 41 in pool  # F2 (below staff)
+
+    def test_lesson_3_5_full_range(self):
+        ex = LESSON_3_5.exercises[0]
+        pool = set(ex.note_pool)
+        assert 40 in pool  # E2
+        assert 60 in pool  # C4
+        assert len(pool) == 13
+        for m in pool:
+            assert not is_black_key(m)
+
+    def test_level_3_content(self):
+        for lesson in LEVEL_3_LESSONS:
+            assert len(lesson.content_md) > 50
+
+    # ── Full prerequisite chain ───────────────────────────────────
+
+    def test_full_prerequisite_chain(self):
+        """Every lesson except 0.1 has a prerequisite that exists."""
+        for lesson in ALL_LESSONS:
+            if lesson.prerequisite_id is not None:
+                assert lesson.prerequisite_id in LESSON_BY_ID, (
+                    f"Lesson {lesson.id} has invalid prerequisite {lesson.prerequisite_id}"
+                )
 
     def test_no_black_keys_in_note_pools(self):
         for lesson in ALL_LESSONS:
@@ -416,3 +548,7 @@ class TestExerciseState:
         assert "flashPianoKey" in FLASH_JS
         assert "highlightPianoKeyPersist" in FLASH_JS
         assert "resetPianoKey" in FLASH_JS
+
+    def test_flash_js_defines_active_zone(self):
+        assert "setActiveZone" in FLASH_JS
+        assert "clearActiveZone" in FLASH_JS
