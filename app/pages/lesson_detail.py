@@ -5,10 +5,18 @@ from __future__ import annotations
 from nicegui import ui
 
 from app.keyboard.renderer import create_keyboard
-from app.lessons.curriculum import LESSON_BY_ID
+from app.lessons.curriculum import ALL_LESSONS, LESSON_BY_ID
 from app.lessons.db import get_progress, save_attempt
 from app.lessons.exercise import LessonExercise
 from app.midi.bridge import MidiBridge
+
+
+def _next_lesson_id(current_id: str) -> str | None:
+    """Return the id of the next lesson in the curriculum, or None if last."""
+    for i, lesson in enumerate(ALL_LESSONS):
+        if lesson.id == current_id and i + 1 < len(ALL_LESSONS):
+            return ALL_LESSONS[i + 1].id
+    return None
 
 
 async def content(midi: MidiBridge, lesson_id: str) -> None:
@@ -44,6 +52,8 @@ async def content(midi: MidiBridge, lesson_id: str) -> None:
     ui.markdown(lesson.content_md).classes("w-full q-my-md")
 
     # Exercises
+    next_id = _next_lesson_id(lesson_id)
+
     if lesson.exercises:
         ui.separator()
         for i, exercise in enumerate(lesson.exercises):
@@ -56,6 +66,15 @@ async def content(midi: MidiBridge, lesson_id: str) -> None:
                         type="positive",
                         position="top",
                     )
+                    if next_id:
+                        nxt = LESSON_BY_ID[next_id]
+                        ui.button(
+                            f"Next → Lesson {nxt.id}: {nxt.title}",
+                            icon="arrow_forward",
+                            on_click=lambda nid=next_id: ui.navigate.to(
+                                f"/lessons/{nid}"
+                            ),
+                        ).props("color=primary").classes("q-mt-md")
 
             ex_ui = LessonExercise(exercise, midi, on_complete=_on_complete)
             ex_ui.create_ui()

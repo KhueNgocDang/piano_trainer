@@ -108,7 +108,13 @@ class TestCurriculum:
         assert len(ALL_LESSONS) == 17  # 3 + 4 + 5 + 5
 
     def test_all_levels_make_all(self):
-        assert ALL_LESSONS == LEVEL_0_LESSONS + LEVEL_1_LESSONS + LEVEL_2_LESSONS + LEVEL_3_LESSONS
+        assert (
+            ALL_LESSONS
+            == LEVEL_0_LESSONS
+            + LEVEL_1_LESSONS
+            + LEVEL_2_LESSONS
+            + LEVEL_3_LESSONS
+        )
 
     def test_lesson_ids_unique(self):
         ids = [l.id for l in ALL_LESSONS]
@@ -207,9 +213,9 @@ class TestCurriculum:
         """Each lesson's note pool should be a superset of the previous."""
         pools = [set(l.exercises[0].note_pool) for l in LEVEL_2_LESSONS]
         for i in range(1, len(pools)):
-            assert pools[i - 1].issubset(pools[i]), (
-                f"Lesson 2.{i} pool is not a superset of 2.{i - 1}"
-            )
+            assert pools[i - 1].issubset(
+                pools[i]
+            ), f"Lesson 2.{i} pool is not a superset of 2.{i - 1}"
 
     def test_lesson_2_1_notes(self):
         ex = LESSON_2_1.exercises[0]
@@ -260,9 +266,9 @@ class TestCurriculum:
         """Each lesson's note pool should be a superset of the previous."""
         pools = [set(l.exercises[0].note_pool) for l in LEVEL_3_LESSONS]
         for i in range(1, len(pools)):
-            assert pools[i - 1].issubset(pools[i]), (
-                f"Lesson 3.{i} pool is not a superset of 3.{i - 1}"
-            )
+            assert pools[i - 1].issubset(
+                pools[i]
+            ), f"Lesson 3.{i} pool is not a superset of 3.{i - 1}"
 
     def test_lesson_3_1_notes(self):
         ex = LESSON_3_1.exercises[0]
@@ -299,9 +305,9 @@ class TestCurriculum:
         """Every lesson except 0.1 has a prerequisite that exists."""
         for lesson in ALL_LESSONS:
             if lesson.prerequisite_id is not None:
-                assert lesson.prerequisite_id in LESSON_BY_ID, (
-                    f"Lesson {lesson.id} has invalid prerequisite {lesson.prerequisite_id}"
-                )
+                assert (
+                    lesson.prerequisite_id in LESSON_BY_ID
+                ), f"Lesson {lesson.id} has invalid prerequisite {lesson.prerequisite_id}"
 
     def test_no_black_keys_in_note_pools(self):
         for lesson in ALL_LESSONS:

@@ -359,8 +359,36 @@ LEVEL_1_LESSONS: tuple[Lesson, ...] = (
 _L2_POOL_1 = (60, 62, 64)  # C4, D4, E4
 _L2_POOL_2 = (60, 62, 64, 65, 67)  # + F4, G4
 _L2_POOL_3 = (60, 62, 64, 65, 67, 69, 71, 72)  # + A4, B4, C5
-_L2_POOL_4 = (59, 60, 62, 64, 65, 67, 69, 71, 72, 74, 76, 77)  # + B3, D5, E5, F5
-_L2_POOL_5 = (59, 60, 62, 64, 65, 67, 69, 71, 72, 74, 76, 77, 79, 81)  # + G5, A5
+_L2_POOL_4 = (
+    59,
+    60,
+    62,
+    64,
+    65,
+    67,
+    69,
+    71,
+    72,
+    74,
+    76,
+    77,
+)  # + B3, D5, E5, F5
+_L2_POOL_5 = (
+    59,
+    60,
+    62,
+    64,
+    65,
+    67,
+    69,
+    71,
+    72,
+    74,
+    76,
+    77,
+    79,
+    81,
+)  # + G5, A5
 
 LESSON_2_1 = Lesson(
     id="2.1",
@@ -573,7 +601,20 @@ LEVEL_2_LESSONS: tuple[Lesson, ...] = (
 _L3_POOL_1 = (57, 59, 60)  # A3, B3, C4
 _L3_POOL_2 = (53, 55, 57, 59, 60)  # + F3, G3
 _L3_POOL_3 = (48, 50, 52, 53, 55, 57, 59, 60)  # + C3, D3, E3
-_L3_POOL_4 = (41, 43, 45, 47, 48, 50, 52, 53, 55, 57, 59, 60)  # + F2, G2, A2, B2
+_L3_POOL_4 = (
+    41,
+    43,
+    45,
+    47,
+    48,
+    50,
+    52,
+    53,
+    55,
+    57,
+    59,
+    60,
+)  # + F2, G2, A2, B2
 _L3_POOL_5 = (40, 41, 43, 45, 47, 48, 50, 52, 53, 55, 57, 59, 60)  # + E2
 
 LESSON_3_1 = Lesson(
@@ -770,6 +811,8 @@ LEVEL_3_LESSONS: tuple[Lesson, ...] = (
 
 # ── All lessons in order ──────────────────────────────────────────
 
-ALL_LESSONS: tuple[Lesson, ...] = LEVEL_0_LESSONS + LEVEL_1_LESSONS + LEVEL_2_LESSONS + LEVEL_3_LESSONS
+ALL_LESSONS: tuple[Lesson, ...] = (
+    LEVEL_0_LESSONS + LEVEL_1_LESSONS + LEVEL_2_LESSONS + LEVEL_3_LESSONS
+)
 
 LESSON_BY_ID: dict[str, Lesson] = {lsn.id: lsn for lsn in ALL_LESSONS}
