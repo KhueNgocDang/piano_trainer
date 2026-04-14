@@ -11,6 +11,7 @@ from nicegui import ui
 from app.keyboard.renderer import create_keyboard, is_black_key
 from app.midi.bridge import MidiBridge
 from app.staff.renderer import (
+    KEY_SIGNATURES,
     midi_to_note_name,
     render_bass_staff_svg,
     render_grand_staff_svg,
@@ -178,23 +179,26 @@ def content(midi: MidiBridge) -> None:
         "max_midi": DEFAULT_MAX_MIDI,
         "sharps_flats": DEFAULT_SHARPS_FLATS,
         "ledger_lines": DEFAULT_LEDGER_LINES,
+        "key_signature": None,
     }
 
     # ── Helpers ──────────────────────────────────────────────────
 
     def _render_empty_staff() -> str:
+        ks = config["key_signature"]
         if config["clef"] == "bass":
-            return render_bass_staff_svg()
+            return render_bass_staff_svg(key_signature=ks)
         elif config["clef"] == "grand":
-            return render_grand_staff_svg()
-        return render_staff_svg()
+            return render_grand_staff_svg(key_signature=ks)
+        return render_staff_svg(key_signature=ks)
 
     def _render_note(midi: int, clef: str) -> str:
+        ks = config["key_signature"]
         if config["clef"] == "bass":
-            return render_bass_staff_svg(target_midi=midi)
+            return render_bass_staff_svg(target_midi=midi, key_signature=ks)
         elif config["clef"] == "grand":
-            return render_grand_staff_svg(target_midi=midi, target_clef=clef)
-        return render_staff_svg(target_midi=midi)
+            return render_grand_staff_svg(target_midi=midi, target_clef=clef, key_signature=ks)
+        return render_staff_svg(target_midi=midi, key_signature=ks)
 
     def _update_display() -> None:
         if score_label_ref["el"]:
@@ -408,6 +412,25 @@ def content(midi: MidiBridge) -> None:
                     "ledger_lines", e.value
                 ),
             )
+
+            ui.separator().classes("q-my-sm")
+
+            ui.label("Key Signature").classes("text-subtitle2")
+            _ks_options = {"none": "None (C major)"}
+            _ks_options.update(
+                {k: k + " major" for k in KEY_SIGNATURES if k != "C"}
+            )
+
+            def _on_keysig_change(e) -> None:
+                config["key_signature"] = None if e.value == "none" else e.value
+                if staff_html_ref["el"] and not active["value"]:
+                    staff_html_ref["el"].content = _render_empty_staff()
+
+            ui.select(
+                options=_ks_options,
+                value="none",
+                on_change=_on_keysig_change,
+            ).props("dense outlined").classes("w-full")
 
         # ── Main practice area ───────────────────────────────────
         with ui.column().classes("flex-grow gap-4"):

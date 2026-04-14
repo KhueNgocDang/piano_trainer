@@ -550,12 +550,12 @@ Each milestone is a self-contained deliverable. After completing each one, devel
 **Goal:** Teach accidentals and common key signatures.
 
 **Deliverables:**
-- [ ] Lesson 5.1 — Sharps & Flats: visual explanation of ♯/♭ on staff and keyboard.
-- [ ] Exercises: staff shows a note with accidental → user plays the correct (sharp/flat) key.
-- [ ] Lesson 5.2 — Key Signatures: C major, G major, F major, D major, Bb major.
-- [ ] Key signature displayed at the beginning of the staff in exercises.
-- [ ] Notes within a key signature exercise follow the signature (no accidental on each note).
-- [ ] Practice mode updated: key signature selector added to config.
+- [x] Lesson 5.1 — Sharps & Flats: visual explanation of ♯/♭ on staff and keyboard.
+- [x] Exercises: staff shows a note with accidental → user plays the correct (sharp/flat) key.
+- [x] Lesson 5.2 — Key Signatures: C major, G major, F major, D major, Bb major.
+- [x] Key signature displayed at the beginning of the staff in exercises.
+- [x] Notes within a key signature exercise follow the signature (no accidental on each note).
+- [x] Practice mode updated: key signature selector added to config.
 
 **Verification checklist:**
 > 1. Lesson 5.1 clearly explains sharps and flats with before/after visuals.

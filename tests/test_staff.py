@@ -134,8 +134,10 @@ class TestLedgerLines:
         ledgers = needs_ledger_lines(84)
         assert len(ledgers) >= 1
 
-    def test_accidental_empty(self):
-        assert needs_ledger_lines(61) == []
+    def test_accidental_has_ledger_like_base_note(self):
+        """C#4 (MIDI 61) is positioned at C4 — needs a ledger line below staff."""
+        ledgers = needs_ledger_lines(61)
+        assert len(ledgers) >= 1  # same as C4
 
 
 # ── Note names ──────────────────────────────────────────────────

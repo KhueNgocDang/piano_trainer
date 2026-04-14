@@ -19,6 +19,7 @@ _LEVEL_TITLES = {
     2: "Level 2 — Note Identification (Treble Clef)",
     3: "Level 3 — Note Identification (Bass Clef)",
     4: "Level 4 — Both Clefs Together",
+    5: "Level 5 — Sharps, Flats & Key Signatures",
 }
 
 

@@ -31,12 +31,15 @@ from app.lessons.curriculum import (
     LESSON_3_5,
     LESSON_4_1,
     LESSON_4_2,
+    LESSON_5_1,
+    LESSON_5_2,
     LESSON_BY_ID,
     LEVEL_0_LESSONS,
     LEVEL_1_LESSONS,
     LEVEL_2_LESSONS,
     LEVEL_3_LESSONS,
     LEVEL_4_LESSONS,
+    LEVEL_5_LESSONS,
 )
 from app.lessons import db as lesson_db
 from app.lessons.exercise import ExerciseState, FLASH_JS
@@ -108,7 +111,7 @@ class TestLessonModels:
 
 class TestCurriculum:
     def test_all_lessons_count(self):
-        assert len(ALL_LESSONS) == 19  # 3 + 4 + 5 + 5 + 2
+        assert len(ALL_LESSONS) == 21  # 3 + 4 + 5 + 5 + 2 + 2
 
     def test_all_levels_make_all(self):
         assert (
@@ -118,6 +121,7 @@ class TestCurriculum:
             + LEVEL_2_LESSONS
             + LEVEL_3_LESSONS
             + LEVEL_4_LESSONS
+            + LEVEL_5_LESSONS
         )
 
     def test_lesson_ids_unique(self):
@@ -358,8 +362,10 @@ class TestCurriculum:
                     lesson.prerequisite_id in LESSON_BY_ID
                 ), f"Lesson {lesson.id} has invalid prerequisite {lesson.prerequisite_id}"
 
-    def test_no_black_keys_in_note_pools(self):
+    def test_no_black_keys_in_note_pools_before_level_5(self):
         for lesson in ALL_LESSONS:
+            if lesson.level >= 5:
+                continue  # Level 5+ intentionally includes accidentals
             for ex in lesson.exercises:
                 for m in ex.note_pool:
                     assert not is_black_key(m), f"Black key {m} in {lesson.id}"
@@ -603,6 +609,192 @@ class TestExerciseState:
         assert "flashPianoKey" in FLASH_JS
         assert "highlightPianoKeyPersist" in FLASH_JS
         assert "resetPianoKey" in FLASH_JS
+
+
+# ═══════════════════════════════════════════════════════════════════
+# Level 5 — Sharps, Flats & Key Signatures
+# ═══════════════════════════════════════════════════════════════════
+
+
+class TestLevel5Curriculum:
+    def test_level_5_count(self):
+        assert len(LEVEL_5_LESSONS) == 2
+
+    def test_lesson_5_1_fields(self):
+        assert LESSON_5_1.id == "5.1"
+        assert LESSON_5_1.level == 5
+        assert LESSON_5_1.prerequisite_id == "4.2"
+        assert len(LESSON_5_1.exercises) == 2
+
+    def test_lesson_5_1_treble_has_accidentals(self):
+        ex = LESSON_5_1.exercises[0]
+        assert ex.clef == Clef.TREBLE
+        # Should include black keys (accidentals)
+        assert any(is_black_key(m) for m in ex.note_pool)
+
+    def test_lesson_5_1_bass_has_accidentals(self):
+        ex = LESSON_5_1.exercises[1]
+        assert ex.clef == Clef.BASS
+        assert any(is_black_key(m) for m in ex.note_pool)
+
+    def test_lesson_5_2_key_signatures(self):
+        assert LESSON_5_2.id == "5.2"
+        assert LESSON_5_2.prerequisite_id == "5.1"
+        assert len(LESSON_5_2.exercises) == 4
+
+    def test_lesson_5_2_exercises_have_key_signatures(self):
+        keys = [ex.key_signature for ex in LESSON_5_2.exercises]
+        assert keys == ["G", "F", "D", "Bb"]
+
+    def test_lesson_5_1_no_key_signature(self):
+        for ex in LESSON_5_1.exercises:
+            assert ex.key_signature is None
+
+    def test_lesson_by_id_level_5(self):
+        assert LESSON_BY_ID["5.1"] is LESSON_5_1
+        assert LESSON_BY_ID["5.2"] is LESSON_5_2
+
+
+class TestAccidentalRendering:
+    """Tests for accidental (♯/♭) rendering in SVG output."""
+
+    def test_sharp_note_renders_svg(self):
+        """C#4 (MIDI 61) should render an SVG with a note."""
+        svg = render_staff_svg(target_midi=61)
+        assert "<ellipse" in svg
+        assert "<svg" in svg
+
+    def test_flat_note_renders_svg(self):
+        """Bb4 (MIDI 70) should render an SVG with a note."""
+        svg = render_staff_svg(target_midi=70)
+        assert "<ellipse" in svg
+
+    def test_sharp_glyph_in_svg(self):
+        """Sharp notes should have a sharp glyph (# lines) in the SVG."""
+        svg = render_staff_svg(target_midi=61)  # C#4
+        # Sharp glyph consists of path elements
+        assert 'id="staff-note"' in svg
+
+    def test_bass_accidental_renders(self):
+        """Accidentals render on bass clef too."""
+        svg = render_bass_staff_svg(target_midi=46)  # Bb2
+        assert "<ellipse" in svg
+        assert "<svg" in svg
+
+    def test_grand_accidental_renders(self):
+        """Accidentals render on grand staff."""
+        svg = render_grand_staff_svg(target_midi=61, target_clef="treble")
+        assert "<ellipse" in svg
+
+
+class TestKeySignatureRendering:
+    """Tests for key signature rendering in SVG output."""
+
+    def test_c_major_no_keysig_symbols(self):
+        """C major (no accidentals) should not add extra symbols."""
+        svg_plain = render_staff_svg()
+        svg_c = render_staff_svg(key_signature="C")
+        # Both should be the same — no key sig symbols added
+        assert svg_plain == svg_c
+
+    def test_g_major_has_sharp(self):
+        """G major should render one sharp symbol in key signature area."""
+        svg = render_staff_svg(key_signature="G")
+        # G major has F# — should have a sharp glyph
+        assert "<svg" in svg
+        # The key signature rendering adds extra path/line elements
+        svg_plain = render_staff_svg()
+        assert len(svg) > len(svg_plain)
+
+    def test_f_major_has_flat(self):
+        """F major should render one flat symbol in key signature area."""
+        svg = render_staff_svg(key_signature="F")
+        svg_plain = render_staff_svg()
+        assert len(svg) > len(svg_plain)
+
+    def test_bass_keysig(self):
+        """Key signatures render on bass clef."""
+        svg = render_bass_staff_svg(key_signature="G")
+        svg_plain = render_bass_staff_svg()
+        assert len(svg) > len(svg_plain)
+
+    def test_grand_keysig(self):
+        """Key signatures render on grand staff."""
+        svg = render_grand_staff_svg(key_signature="G")
+        svg_plain = render_grand_staff_svg()
+        assert len(svg) > len(svg_plain)
+
+    def test_note_with_keysig(self):
+        """A note in key signature should render without per-note accidental."""
+        svg = render_staff_svg(target_midi=66, key_signature="G")  # F#4 in G major
+        assert "<ellipse" in svg
+
+    def test_d_major_two_sharps(self):
+        """D major should have more key sig content than G major (2 sharps vs 1)."""
+        svg_g = render_staff_svg(key_signature="G")
+        svg_d = render_staff_svg(key_signature="D")
+        assert len(svg_d) > len(svg_g)
+
+    def test_invalid_keysig_ignored(self):
+        """Unknown key signature should be ignored (same as no key sig)."""
+        svg_plain = render_staff_svg()
+        svg_invalid = render_staff_svg(key_signature="Z")
+        assert svg_plain == svg_invalid
+
+
+class TestShouldShowAccidental:
+    """Tests for _should_show_accidental logic."""
+
+    def test_natural_note_no_accidental(self):
+        from app.staff.renderer import _should_show_accidental
+        assert _should_show_accidental(60, None) == ""  # C4
+
+    def test_sharp_without_keysig(self):
+        from app.staff.renderer import _should_show_accidental
+        assert _should_show_accidental(61, None) == "sharp"  # C#4
+
+    def test_sharp_covered_by_keysig(self):
+        from app.staff.renderer import _should_show_accidental
+        # F#4 (MIDI 66, pc=6) in G major (has F#)
+        assert _should_show_accidental(66, "G") == ""
+
+    def test_sharp_not_covered_by_keysig(self):
+        from app.staff.renderer import _should_show_accidental
+        # C#4 (MIDI 61, pc=1) in G major (only has F#)
+        assert _should_show_accidental(61, "G") == "sharp"
+
+    def test_flat_without_keysig(self):
+        from app.staff.renderer import _should_show_accidental
+        # A#4/Bb4 (MIDI 70, pc=10) — rendered as sharp of A
+        assert _should_show_accidental(70, None) == "sharp"
+
+    def test_flat_covered_by_keysig(self):
+        from app.staff.renderer import _should_show_accidental
+        # A#/Bb (pc=10) in F major (has Bb at pc=10)
+        assert _should_show_accidental(70, "F") == ""
+
+    def test_c_major_shows_all_accidentals(self):
+        from app.staff.renderer import _should_show_accidental
+        # C major has no accidentals, so all sharps should show
+        assert _should_show_accidental(61, "C") == "sharp"  # C#
+        assert _should_show_accidental(66, "C") == "sharp"  # F#
+
+
+class TestExerciseKeySignature:
+    """Tests for key_signature field on Exercise model."""
+
+    def test_default_is_none(self):
+        ex = Exercise(clef=Clef.TREBLE, note_pool=(60,))
+        assert ex.key_signature is None
+
+    def test_explicit_key_signature(self):
+        ex = Exercise(clef=Clef.TREBLE, note_pool=(60,), key_signature="G")
+        assert ex.key_signature == "G"
+
+    def test_frozen(self):
+        ex = Exercise(clef=Clef.TREBLE, note_pool=(60,), key_signature="D")
+        with pytest.raises(AttributeError):
+            ex.key_signature = "F"
 
     def test_flash_js_defines_active_zone(self):
         assert "setActiveZone" in FLASH_JS

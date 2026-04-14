@@ -168,22 +168,24 @@ class LessonExercise:
         ui.run_javascript(FLASH_JS)
 
     def _render_empty_staff(self) -> str:
+        ks = self._exercise.key_signature
         if self._exercise.clef == Clef.BASS:
-            return render_bass_staff_svg()
+            return render_bass_staff_svg(key_signature=ks)
         elif self._exercise.clef == Clef.GRAND:
-            return render_grand_staff_svg()
+            return render_grand_staff_svg(key_signature=ks)
         else:
-            return render_staff_svg()
+            return render_staff_svg(key_signature=ks)
 
     def _render_note(self, midi: int) -> str:
+        ks = self._exercise.key_signature
         if self._exercise.clef == Clef.BASS:
-            return render_bass_staff_svg(target_midi=midi)
+            return render_bass_staff_svg(target_midi=midi, key_signature=ks)
         elif self._exercise.clef == Clef.GRAND:
             clef = self._choose_clef_for_note(midi)
             self._state.target_clef = clef
-            return render_grand_staff_svg(target_midi=midi, target_clef=clef)
+            return render_grand_staff_svg(target_midi=midi, target_clef=clef, key_signature=ks)
         else:
-            return render_staff_svg(target_midi=midi)
+            return render_staff_svg(target_midi=midi, key_signature=ks)
 
     def _choose_clef_for_note(self, midi: int) -> str:
         """Choose which clef to display a note on for grand staff exercises."""

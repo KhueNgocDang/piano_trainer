@@ -28,12 +28,14 @@ class Exercise:
         note_pool: MIDI numbers of notes that may appear in this exercise.
         num_notes: How many notes the student must identify.
         pass_threshold: Fraction correct to pass (default 0.8 = 80%).
+        key_signature: Key name (e.g. 'G', 'F', 'Bb') or None for C major.
     """
 
     clef: Clef
     note_pool: tuple[int, ...]
     num_notes: int = 10
     pass_threshold: float = 0.80
+    key_signature: str | None = None
 
 
 @dataclass(frozen=True)

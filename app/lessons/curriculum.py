@@ -909,6 +909,150 @@ LEVEL_4_LESSONS: tuple[Lesson, ...] = (
     LESSON_4_2,
 )
 
+# ═════════════════════════════════════════════════════════════════
+# Level 5 — Sharps, Flats & Key Signatures
+# ═════════════════════════════════════════════════════════════════
+
+# Note pools that include accidentals (black keys)
+_L5_SHARPS_TREBLE = (
+    60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71,  # C4–B4 chromatic
+    72, 73, 74, 75, 76, 77, 78, 79,  # C5–G5 chromatic
+)
+_L5_SHARPS_BASS = (
+    40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51,  # E2–Eb3 chromatic
+    52, 53, 54, 55, 56, 57, 58, 59, 60,  # E3–C4 chromatic
+)
+
+# G major note pool (F# included, naturals on other notes)
+_L5_G_MAJOR_TREBLE = (60, 62, 64, 66, 67, 69, 71, 72, 74, 76, 78, 79)  # C D E F# G A B ...
+_L5_F_MAJOR_TREBLE = (60, 62, 64, 65, 67, 69, 70, 72, 74, 76, 77, 79)  # C D E F G A Bb ...
+_L5_D_MAJOR_TREBLE = (61, 62, 64, 66, 67, 69, 71, 73, 74, 76, 78, 79)  # C# D E F# G A B ...
+_L5_Bb_MAJOR_TREBLE = (60, 62, 63, 65, 67, 69, 70, 72, 74, 75, 77, 79)  # C D Eb F G A Bb ...
+
+LESSON_5_1 = Lesson(
+    id="5.1",
+    title="Sharps & Flats",
+    level=5,
+    description="Learn to read and play sharp (♯) and flat (♭) notes on the staff.",
+    content_md="""\
+## Sharps & Flats
+
+A **sharp (♯)** raises a note by one half step (one key to the right on the piano).
+A **flat (♭)** lowers a note by one half step (one key to the left on the piano).
+
+### On the Staff
+When a note has an accidental, the ♯ or ♭ symbol appears **directly to the left** \
+of the note head. This tells you to play the black key instead of the white key.
+
+### Common Accidentals
+| Written | Means | MIDI Example |
+|---------|-------|-------------|
+| F♯ | Play the black key between F and G | F♯4 = MIDI 66 |
+| B♭ | Play the black key between A and B | B♭4 = MIDI 70 |
+| C♯ | Play the black key between C and D | C♯4 = MIDI 61 |
+| E♭ | Play the black key between D and E | E♭4 = MIDI 63 |
+| G♯ | Play the black key between G and A | G♯4 = MIDI 68 |
+
+### Enharmonic Equivalents
+The same black key can have two names:
+- F♯ = G♭ (same key!)
+- C♯ = D♭ (same key!)
+
+### Exercise
+Notes with sharps and flats will appear on the staff. Play the correct key, \
+including the black keys!
+""",
+    exercises=(
+        Exercise(
+            clef=Clef.TREBLE,
+            note_pool=_L5_SHARPS_TREBLE,
+            num_notes=15,
+            pass_threshold=0.75,
+        ),
+        Exercise(
+            clef=Clef.BASS,
+            note_pool=_L5_SHARPS_BASS,
+            num_notes=10,
+            pass_threshold=0.70,
+        ),
+    ),
+    prerequisite_id="4.2",
+)
+
+LESSON_5_2 = Lesson(
+    id="5.2",
+    title="Key Signatures",
+    level=5,
+    description="Understand key signatures and how they affect which notes are sharp or flat.",
+    content_md="""\
+## Key Signatures
+
+A **key signature** appears at the beginning of each staff line, right after the clef. \
+It tells you which notes are **always** sharp or flat throughout the piece — so you \
+don't need an accidental on every single note.
+
+### How Key Signatures Work
+- The sharps or flats in the key signature apply to **every occurrence** of that note.
+- If the key signature has F♯, then **every F** in the piece is played as F♯.
+- No extra ♯ symbol is written next to each F — the key signature does it for you.
+
+### Common Key Signatures
+
+| Key | Accidentals | Sharps/Flats |
+|-----|------------|--------------|
+| **C major** | None | — |
+| **G major** | F♯ | 1 sharp |
+| **D major** | F♯, C♯ | 2 sharps |
+| **F major** | B♭ | 1 flat |
+| **B♭ major** | B♭, E♭ | 2 flats |
+
+### Reading with Key Signatures
+1. Look at the key signature after the clef
+2. Remember which notes are affected
+3. When you see one of those notes, play the sharp/flat version
+
+### Exercises
+Practice playing in different keys! The key signature is shown at the beginning \
+of the staff. Notes within the key follow the signature — no extra accidentals.
+""",
+    exercises=(
+        Exercise(
+            clef=Clef.TREBLE,
+            note_pool=_L5_G_MAJOR_TREBLE,
+            num_notes=12,
+            pass_threshold=0.75,
+            key_signature="G",
+        ),
+        Exercise(
+            clef=Clef.TREBLE,
+            note_pool=_L5_F_MAJOR_TREBLE,
+            num_notes=12,
+            pass_threshold=0.75,
+            key_signature="F",
+        ),
+        Exercise(
+            clef=Clef.TREBLE,
+            note_pool=_L5_D_MAJOR_TREBLE,
+            num_notes=12,
+            pass_threshold=0.75,
+            key_signature="D",
+        ),
+        Exercise(
+            clef=Clef.TREBLE,
+            note_pool=_L5_Bb_MAJOR_TREBLE,
+            num_notes=12,
+            pass_threshold=0.75,
+            key_signature="Bb",
+        ),
+    ),
+    prerequisite_id="5.1",
+)
+
+LEVEL_5_LESSONS: tuple[Lesson, ...] = (
+    LESSON_5_1,
+    LESSON_5_2,
+)
+
 # ── All lessons in order ──────────────────────────────────────────
 
 ALL_LESSONS: tuple[Lesson, ...] = (
@@ -917,6 +1061,7 @@ ALL_LESSONS: tuple[Lesson, ...] = (
     + LEVEL_2_LESSONS
     + LEVEL_3_LESSONS
     + LEVEL_4_LESSONS
+    + LEVEL_5_LESSONS
 )
 
 LESSON_BY_ID: dict[str, Lesson] = {lsn.id: lsn for lsn in ALL_LESSONS}
