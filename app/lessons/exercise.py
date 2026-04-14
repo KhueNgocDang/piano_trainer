@@ -183,7 +183,9 @@ class LessonExercise:
         elif self._exercise.clef == Clef.GRAND:
             clef = self._choose_clef_for_note(midi)
             self._state.target_clef = clef
-            return render_grand_staff_svg(target_midi=midi, target_clef=clef, key_signature=ks)
+            return render_grand_staff_svg(
+                target_midi=midi, target_clef=clef, key_signature=ks
+            )
         else:
             return render_staff_svg(target_midi=midi, key_signature=ks)
 

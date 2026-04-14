@@ -915,19 +915,108 @@ LEVEL_4_LESSONS: tuple[Lesson, ...] = (
 
 # Note pools that include accidentals (black keys)
 _L5_SHARPS_TREBLE = (
-    60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71,  # C4–B4 chromatic
-    72, 73, 74, 75, 76, 77, 78, 79,  # C5–G5 chromatic
+    60,
+    61,
+    62,
+    63,
+    64,
+    65,
+    66,
+    67,
+    68,
+    69,
+    70,
+    71,  # C4–B4 chromatic
+    72,
+    73,
+    74,
+    75,
+    76,
+    77,
+    78,
+    79,  # C5–G5 chromatic
 )
 _L5_SHARPS_BASS = (
-    40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51,  # E2–Eb3 chromatic
-    52, 53, 54, 55, 56, 57, 58, 59, 60,  # E3–C4 chromatic
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47,
+    48,
+    49,
+    50,
+    51,  # E2–Eb3 chromatic
+    52,
+    53,
+    54,
+    55,
+    56,
+    57,
+    58,
+    59,
+    60,  # E3–C4 chromatic
 )
 
 # G major note pool (F# included, naturals on other notes)
-_L5_G_MAJOR_TREBLE = (60, 62, 64, 66, 67, 69, 71, 72, 74, 76, 78, 79)  # C D E F# G A B ...
-_L5_F_MAJOR_TREBLE = (60, 62, 64, 65, 67, 69, 70, 72, 74, 76, 77, 79)  # C D E F G A Bb ...
-_L5_D_MAJOR_TREBLE = (61, 62, 64, 66, 67, 69, 71, 73, 74, 76, 78, 79)  # C# D E F# G A B ...
-_L5_Bb_MAJOR_TREBLE = (60, 62, 63, 65, 67, 69, 70, 72, 74, 75, 77, 79)  # C D Eb F G A Bb ...
+_L5_G_MAJOR_TREBLE = (
+    60,
+    62,
+    64,
+    66,
+    67,
+    69,
+    71,
+    72,
+    74,
+    76,
+    78,
+    79,
+)  # C D E F# G A B ...
+_L5_F_MAJOR_TREBLE = (
+    60,
+    62,
+    64,
+    65,
+    67,
+    69,
+    70,
+    72,
+    74,
+    76,
+    77,
+    79,
+)  # C D E F G A Bb ...
+_L5_D_MAJOR_TREBLE = (
+    61,
+    62,
+    64,
+    66,
+    67,
+    69,
+    71,
+    73,
+    74,
+    76,
+    78,
+    79,
+)  # C# D E F# G A B ...
+_L5_Bb_MAJOR_TREBLE = (
+    60,
+    62,
+    63,
+    65,
+    67,
+    69,
+    70,
+    72,
+    74,
+    75,
+    77,
+    79,
+)  # C D Eb F G A Bb ...
 
 LESSON_5_1 = Lesson(
     id="5.1",

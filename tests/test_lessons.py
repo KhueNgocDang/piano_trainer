@@ -726,7 +726,9 @@ class TestKeySignatureRendering:
 
     def test_note_with_keysig(self):
         """A note in key signature should render without per-note accidental."""
-        svg = render_staff_svg(target_midi=66, key_signature="G")  # F#4 in G major
+        svg = render_staff_svg(
+            target_midi=66, key_signature="G"
+        )  # F#4 in G major
         assert "<ellipse" in svg
 
     def test_d_major_two_sharps(self):
@@ -747,34 +749,41 @@ class TestShouldShowAccidental:
 
     def test_natural_note_no_accidental(self):
         from app.staff.renderer import _should_show_accidental
+
         assert _should_show_accidental(60, None) == ""  # C4
 
     def test_sharp_without_keysig(self):
         from app.staff.renderer import _should_show_accidental
+
         assert _should_show_accidental(61, None) == "sharp"  # C#4
 
     def test_sharp_covered_by_keysig(self):
         from app.staff.renderer import _should_show_accidental
+
         # F#4 (MIDI 66, pc=6) in G major (has F#)
         assert _should_show_accidental(66, "G") == ""
 
     def test_sharp_not_covered_by_keysig(self):
         from app.staff.renderer import _should_show_accidental
+
         # C#4 (MIDI 61, pc=1) in G major (only has F#)
         assert _should_show_accidental(61, "G") == "sharp"
 
     def test_flat_without_keysig(self):
         from app.staff.renderer import _should_show_accidental
+
         # A#4/Bb4 (MIDI 70, pc=10) — rendered as sharp of A
         assert _should_show_accidental(70, None) == "sharp"
 
     def test_flat_covered_by_keysig(self):
         from app.staff.renderer import _should_show_accidental
+
         # A#/Bb (pc=10) in F major (has Bb at pc=10)
         assert _should_show_accidental(70, "F") == ""
 
     def test_c_major_shows_all_accidentals(self):
         from app.staff.renderer import _should_show_accidental
+
         # C major has no accidentals, so all sharps should show
         assert _should_show_accidental(61, "C") == "sharp"  # C#
         assert _should_show_accidental(66, "C") == "sharp"  # F#

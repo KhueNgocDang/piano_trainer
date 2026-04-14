@@ -70,18 +70,18 @@ _DIATONIC_OFFSETS = (0, 2, 4, 5, 7, 9, 11)
 # When rendering a sharp: place note at the natural position + draw ♯
 # When rendering a flat: place note at the natural above + draw ♭
 _CHROMATIC_TO_DIATONIC: dict[int, tuple[int, str]] = {
-    0: (0, ""),      # C
-    1: (0, "sharp"), # C# → position of C + ♯
-    2: (2, ""),      # D
-    3: (2, "sharp"), # D# → position of D + ♯
-    4: (4, ""),      # E
-    5: (5, ""),      # F
-    6: (5, "sharp"), # F# → position of F + ♯
-    7: (7, ""),      # G
-    8: (7, "sharp"), # G# → position of G + ♯
-    9: (9, ""),      # A
-    10: (9, "sharp"),# A# → position of A + ♯
-    11: (11, ""),    # B
+    0: (0, ""),  # C
+    1: (0, "sharp"),  # C# → position of C + ♯
+    2: (2, ""),  # D
+    3: (2, "sharp"),  # D# → position of D + ♯
+    4: (4, ""),  # E
+    5: (5, ""),  # F
+    6: (5, "sharp"),  # F# → position of F + ♯
+    7: (7, ""),  # G
+    8: (7, "sharp"),  # G# → position of G + ♯
+    9: (9, ""),  # A
+    10: (9, "sharp"),  # A# → position of A + ♯
+    11: (11, ""),  # B
 }
 
 # ── Key signature definitions ────────────────────────────────────
@@ -90,34 +90,43 @@ _CHROMATIC_TO_DIATONIC: dict[int, tuple[int, str]] = {
 # For flat keys: the accidentals are flats applied to these PCs.
 
 KEY_SIGNATURES: dict[str, dict] = {
-    "C":  {"accidentals": {},                                            "type": "none"},
-    "G":  {"accidentals": {6: "sharp"},                                   "type": "sharp"},  # F#
-    "D":  {"accidentals": {6: "sharp", 1: "sharp"},                       "type": "sharp"},  # F#, C#
-    "A":  {"accidentals": {6: "sharp", 1: "sharp", 8: "sharp"},           "type": "sharp"},  # F#, C#, G#
-    "E":  {"accidentals": {6: "sharp", 1: "sharp", 8: "sharp", 3: "sharp"}, "type": "sharp"},
-    "F":  {"accidentals": {10: "flat"},                                   "type": "flat"},   # Bb
-    "Bb": {"accidentals": {10: "flat", 3: "flat"},                        "type": "flat"},   # Bb, Eb
-    "Eb": {"accidentals": {10: "flat", 3: "flat", 8: "flat"},             "type": "flat"},
-    "Ab": {"accidentals": {10: "flat", 3: "flat", 8: "flat", 1: "flat"}, "type": "flat"},
+    "C": {"accidentals": {}, "type": "none"},
+    "G": {"accidentals": {6: "sharp"}, "type": "sharp"},  # F#
+    "D": {"accidentals": {6: "sharp", 1: "sharp"}, "type": "sharp"},  # F#, C#
+    "A": {
+        "accidentals": {6: "sharp", 1: "sharp", 8: "sharp"},
+        "type": "sharp",
+    },  # F#, C#, G#
+    "E": {
+        "accidentals": {6: "sharp", 1: "sharp", 8: "sharp", 3: "sharp"},
+        "type": "sharp",
+    },
+    "F": {"accidentals": {10: "flat"}, "type": "flat"},  # Bb
+    "Bb": {"accidentals": {10: "flat", 3: "flat"}, "type": "flat"},  # Bb, Eb
+    "Eb": {"accidentals": {10: "flat", 3: "flat", 8: "flat"}, "type": "flat"},
+    "Ab": {
+        "accidentals": {10: "flat", 3: "flat", 8: "flat", 1: "flat"},
+        "type": "flat",
+    },
 }
 
 # Order of sharps/flats in key signatures on the treble staff (MIDI PCs)
 _SHARP_ORDER_TREBLE_Y_STEPS = [  # steps from B4 for F#, C#, G#, D#, A#, E#, B#
-    (6, 4),   # F5 → 4 steps above B4
-    (1, 0),   # C5 → on B4 wait no, C#5 → 1 step above B4
-    (8, 5),   # G#5 → 5 steps above
-    (3, 1),   # D#5 → 1 step above
+    (6, 4),  # F5 → 4 steps above B4
+    (1, 0),  # C5 → on B4 wait no, C#5 → 1 step above B4
+    (8, 5),  # G#5 → 5 steps above
+    (3, 1),  # D#5 → 1 step above
     (10, 6),  # A#5 → 6 steps above (beyond normal but ok)
 ]
 
 # Staff positions for key signature accidentals (diatonic steps from reference note)
 # Treble clef (from B4): standard engraving positions
-_KEYSIG_SHARP_STEPS_TREBLE = [4, 1, 5, 2, -1, 3, 0]   # F C G D A E B
-_KEYSIG_FLAT_STEPS_TREBLE = [0, 3, -1, 2, -2, 1, -3]   # B E A D G C F
+_KEYSIG_SHARP_STEPS_TREBLE = [4, 1, 5, 2, -1, 3, 0]  # F C G D A E B
+_KEYSIG_FLAT_STEPS_TREBLE = [0, 3, -1, 2, -2, 1, -3]  # B E A D G C F
 
 # Bass clef (from D3): standard engraving positions
-_KEYSIG_SHARP_STEPS_BASS = [2, -1, 3, 0, -3, 1, -2]   # F C G D A E B
-_KEYSIG_FLAT_STEPS_BASS = [-2, 1, -3, 0, -4, -1, -5]   # B E A D G C F
+_KEYSIG_SHARP_STEPS_BASS = [2, -1, 3, 0, -3, 1, -2]  # F C G D A E B
+_KEYSIG_FLAT_STEPS_BASS = [-2, 1, -3, 0, -4, -1, -5]  # B E A D G C F
 
 
 def _midi_to_diatonic_steps_from_b4(midi: int) -> int | None:
@@ -209,6 +218,7 @@ def needs_ledger_lines(midi: int) -> list[float]:
 
 # ── Accidental glyph rendering ───────────────────────────────────
 
+
 def _render_sharp_glyph(x: float, y: float) -> str:
     """Render a ♯ symbol at (x, y) as SVG."""
     # Simple sharp: two vertical lines + two horizontal lines
@@ -218,7 +228,7 @@ def _render_sharp_glyph(x: float, y: float) -> str:
         f'<line x1="3" y1="-8" x2="3" y2="8" stroke="#222" stroke-width="1.2"/>'
         f'<line x1="-6" y1="-3" x2="6" y2="-5" stroke="#222" stroke-width="2"/>'
         f'<line x1="-6" y1="4" x2="6" y2="2" stroke="#222" stroke-width="2"/>'
-        f'</g>'
+        f"</g>"
     )
 
 
@@ -229,7 +239,7 @@ def _render_flat_glyph(x: float, y: float) -> str:
         f'<line x1="-2" y1="-12" x2="-2" y2="5" stroke="#222" stroke-width="1.5"/>'
         f'<path d="M -2,0 C 2,-2 6,-1 6,2 C 6,5 2,6 -2,5" '
         f'fill="none" stroke="#222" stroke-width="1.5"/>'
-        f'</g>'
+        f"</g>"
     )
 
 
@@ -250,7 +260,9 @@ def _render_keysig(
     accidentals = ks["accidentals"]
 
     if sig_type == "sharp":
-        step_list = _KEYSIG_SHARP_STEPS_BASS if is_bass else _KEYSIG_SHARP_STEPS_TREBLE
+        step_list = (
+            _KEYSIG_SHARP_STEPS_BASS if is_bass else _KEYSIG_SHARP_STEPS_TREBLE
+        )
         # Number of sharps = len(accidentals)
         n = len(accidentals)
         x = start_x
@@ -261,7 +273,9 @@ def _render_keysig(
             x += 10
         return x + 4
     elif sig_type == "flat":
-        step_list = _KEYSIG_FLAT_STEPS_BASS if is_bass else _KEYSIG_FLAT_STEPS_TREBLE
+        step_list = (
+            _KEYSIG_FLAT_STEPS_BASS if is_bass else _KEYSIG_FLAT_STEPS_TREBLE
+        )
         n = len(accidentals)
         x = start_x
         for i in range(n):
@@ -371,13 +385,22 @@ def render_staff_svg(
     ks = key_signature or ""
     if ks:
         ref_y = _B4_Y  # B4 on line 3 of treble
-        _render_keysig(parts, ks, ref_y, LINE_SPACING / 2, is_bass=False, start_x=STAFF_LEFT + 6)
+        _render_keysig(
+            parts,
+            ks,
+            ref_y,
+            LINE_SPACING / 2,
+            is_bass=False,
+            start_x=STAFF_LEFT + 6,
+        )
 
     # Note
     if target_midi is not None:
         y, acc = _midi_to_staff_y_ext(target_midi)
         # Determine if per-note accidental is needed
-        show_acc = _should_show_accidental(target_midi, key_signature) if acc else ""
+        show_acc = (
+            _should_show_accidental(target_midi, key_signature) if acc else ""
+        )
 
         # Ledger lines
         for ly in needs_ledger_lines(target_midi):
@@ -560,13 +583,22 @@ def render_bass_staff_svg(
     ks = key_signature or ""
     if ks:
         ref_y = _D3_Y  # D3 on line 3 of bass
-        _render_keysig(parts, ks, ref_y, LINE_SPACING / 2, is_bass=True, start_x=STAFF_LEFT + 6)
+        _render_keysig(
+            parts,
+            ks,
+            ref_y,
+            LINE_SPACING / 2,
+            is_bass=True,
+            start_x=STAFF_LEFT + 6,
+        )
 
     note_x = (STAFF_LEFT + STAFF_RIGHT) / 2
 
     if target_midi is not None:
         y, acc = _midi_to_bass_staff_y_ext(target_midi)
-        show_acc = _should_show_accidental(target_midi, key_signature) if acc else ""
+        show_acc = (
+            _should_show_accidental(target_midi, key_signature) if acc else ""
+        )
 
         for ly in needs_ledger_lines_bass(target_midi):
             parts.append(
@@ -778,15 +810,31 @@ def render_grand_staff_svg(
     ks = key_signature or ""
     if ks:
         treble_ref_y = GRAND_TREBLE_TOP + 2 * LINE_SPACING
-        _render_keysig(parts, ks, treble_ref_y, LINE_SPACING / 2, is_bass=False, start_x=STAFF_LEFT + 6)
+        _render_keysig(
+            parts,
+            ks,
+            treble_ref_y,
+            LINE_SPACING / 2,
+            is_bass=False,
+            start_x=STAFF_LEFT + 6,
+        )
         bass_ref_y = GRAND_BASS_TOP + 2 * LINE_SPACING
-        _render_keysig(parts, ks, bass_ref_y, LINE_SPACING / 2, is_bass=True, start_x=STAFF_LEFT + 6)
+        _render_keysig(
+            parts,
+            ks,
+            bass_ref_y,
+            LINE_SPACING / 2,
+            is_bass=True,
+            start_x=STAFF_LEFT + 6,
+        )
 
     note_x = (STAFF_LEFT + STAFF_RIGHT) / 2
 
     if target_midi is not None:
         y, acc = _midi_to_grand_staff_y_ext(target_midi, target_clef)
-        show_acc = _should_show_accidental(target_midi, key_signature) if acc else ""
+        show_acc = (
+            _should_show_accidental(target_midi, key_signature) if acc else ""
+        )
 
         for ly in needs_ledger_lines_grand(target_midi, target_clef):
             parts.append(

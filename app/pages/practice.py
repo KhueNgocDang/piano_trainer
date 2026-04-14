@@ -197,7 +197,9 @@ def content(midi: MidiBridge) -> None:
         if config["clef"] == "bass":
             return render_bass_staff_svg(target_midi=midi, key_signature=ks)
         elif config["clef"] == "grand":
-            return render_grand_staff_svg(target_midi=midi, target_clef=clef, key_signature=ks)
+            return render_grand_staff_svg(
+                target_midi=midi, target_clef=clef, key_signature=ks
+            )
         return render_staff_svg(target_midi=midi, key_signature=ks)
 
     def _update_display() -> None:
@@ -422,7 +424,9 @@ def content(midi: MidiBridge) -> None:
             )
 
             def _on_keysig_change(e) -> None:
-                config["key_signature"] = None if e.value == "none" else e.value
+                config["key_signature"] = (
+                    None if e.value == "none" else e.value
+                )
                 if staff_html_ref["el"] and not active["value"]:
                     staff_html_ref["el"].content = _render_empty_staff()
 
