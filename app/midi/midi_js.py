@@ -55,6 +55,7 @@ MIDI_JS = """
         }
         if (!deviceId || !midiAccess) {
             fireBridge('midi-status', { connected: false, device: '' });
+            try { localStorage.removeItem('midi_device_id'); } catch(e) {}
             return;
         }
         const input = midiAccess.inputs.get(deviceId);
@@ -64,7 +65,8 @@ MIDI_JS = """
         }
         activeInput = input;
         input.onmidimessage = onMIDIMessage;
-        fireBridge('midi-status', { connected: true, device: input.name });
+        fireBridge('midi-status', { connected: true, device: input.name, device_id: deviceId });
+        try { localStorage.setItem('midi_device_id', deviceId); } catch(e) {}
     };
 
     // --- Refresh device list ---
@@ -82,6 +84,16 @@ MIDI_JS = """
                 activeInput = null;
                 fireBridge('midi-status', { connected: false, device: '' });
             }
+        }
+
+        // Auto-reconnect to previously saved device
+        if (!activeInput) {
+            try {
+                const savedId = localStorage.getItem('midi_device_id');
+                if (savedId && midiAccess.inputs.get(savedId)) {
+                    window.connectMidiDevice(savedId);
+                }
+            } catch(e) {}
         }
     }
 

@@ -39,3 +39,17 @@ def test_get_midi_js_different_ids():
     assert "const BRIDGE_ID = 100;" in js1
     assert "const BRIDGE_ID = 200;" in js2
     assert "const BRIDGE_ID = 100;" not in js2
+
+
+def test_get_midi_js_persists_device_selection():
+    """Ensure the JS stores and retrieves the MIDI device from localStorage."""
+    js = get_midi_js(1)
+    assert "localStorage.setItem" in js
+    assert "localStorage.getItem" in js
+    assert "midi_device_id" in js
+
+
+def test_get_midi_js_clears_storage_on_disconnect():
+    """Ensure disconnecting removes the saved device."""
+    js = get_midi_js(1)
+    assert "localStorage.removeItem" in js

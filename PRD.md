@@ -528,14 +528,14 @@ Each milestone is a self-contained deliverable. After completing each one, devel
 **Goal:** Quick-fire note identification drills in multiple formats.
 
 **Deliverables:**
-- [ ] Flash Cards page (`/flashcards`) with mode selector:
+- [x] Flash Cards page (`/flashcards`) with mode selector:
   - **Staff → Piano:** Note shown on staff, user plays it.
   - **Name → Piano:** Note name shown (e.g., "F#4"), user plays it.
   - **Piano → Name:** Key highlighted on virtual keyboard, user types the name.
-- [ ] Timer per card (configurable: off / 5s / 10s / 15s).
-- [ ] Card count selector (10 / 20 / 50 / unlimited).
-- [ ] End-of-set summary: total correct, accuracy, slowest/fastest response.
-- [ ] Configurable: treble only, bass only, or both.
+- [x] Timer per card (configurable: off / 5s / 10s / 15s).
+- [x] Card count selector (10 / 20 / 50 / unlimited).
+- [x] End-of-set summary: total correct, accuracy, slowest/fastest response.
+- [x] Configurable: treble only, bass only, or both.
 
 **Verification checklist:**
 > 1. Each flash card mode works as described.

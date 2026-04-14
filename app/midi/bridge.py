@@ -136,6 +136,7 @@ class MidiBridge:
     def _on_status(self, data: dict) -> None:
         self.connected = data.get("connected", False)
         self.device_name = data.get("device", "")
+        device_id = data.get("device_id", "")
         error = data.get("error", "")
 
         if error:
@@ -152,6 +153,10 @@ class MidiBridge:
                 self._badge.text = "MIDI: Disconnected"
                 self._badge._props["color"] = "grey"
             self._badge.update()
+
+        # Sync dropdown value on auto-reconnect
+        if self._device_select and self.connected and device_id:
+            self._device_select.value = device_id
 
     # --- Logging ---
 

@@ -24,6 +24,8 @@ async def test_practice_page_loads(user: User):
 async def test_flashcards_page_loads(user: User):
     await user.open("/flashcards")
     await user.should_see("Flash Cards")
+    await user.should_see("Configuration")
+    await user.should_see("Start")
 
 
 async def test_progress_page_loads(user: User):
