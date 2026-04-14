@@ -130,6 +130,7 @@ async def test_lessons_page_shows_level_headers(user: User):
     await user.should_see("Level 1")
     await user.should_see("Level 2")
     await user.should_see("Level 3")
+    await user.should_see("Level 4")
 
 
 async def test_lessons_page_shows_level_2(user: User):
@@ -170,3 +171,31 @@ async def test_lesson_3_1_detail(user: User):
 async def test_lesson_3_5_review(user: User):
     await user.open("/lessons/3.5")
     await user.should_see("Mixed Review")
+
+
+# ── Level 4 page integration tests ───────────────────────────────
+
+
+async def test_lessons_page_shows_level_4(user: User):
+    await user.open("/lessons")
+    await user.should_see("Level 4")
+    await user.should_see("Lesson 4.1")
+    await user.should_see("Grand Staff Reading")
+
+
+async def test_lesson_4_1_detail(user: User):
+    await user.open("/lessons/4.1")
+    await user.should_see("Lesson 4.1")
+    await user.should_see("Grand Staff Reading")
+    await user.should_see("Exercise")
+
+
+async def test_lesson_4_2_landmarks(user: User):
+    await user.open("/lessons/4.2")
+    await user.should_see("Lesson 4.2")
+    await user.should_see("Landmark Notes")
+
+
+async def test_lessons_page_shows_level_4_header(user: User):
+    await user.open("/lessons")
+    await user.should_see("Both Clefs Together")

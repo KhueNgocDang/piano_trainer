@@ -275,23 +275,23 @@ class TestFlashJS:
 
 
 class TestBridgeNoteCallback:
-    def test_callback_fires_on_note_on(self, bridge):
+    async def test_callback_fires_on_note_on(self, bridge):
         received = []
         bridge.on_note_callback = lambda note, vel: received.append(
             (note, vel)
         )
-        bridge._on_note_on({"note": 60, "velocity": 80, "name": "C4"})
+        await bridge._on_note_on({"note": 60, "velocity": 80, "name": "C4"})
         assert received == [(60, 80)]
 
-    def test_callback_not_fired_on_zero_velocity(self, bridge):
+    async def test_callback_not_fired_on_zero_velocity(self, bridge):
         received = []
         bridge.on_note_callback = lambda note, vel: received.append(
             (note, vel)
         )
-        bridge._on_note_on({"note": 60, "velocity": 0, "name": "C4"})
+        await bridge._on_note_on({"note": 60, "velocity": 0, "name": "C4"})
         assert received == []
 
-    def test_no_callback_when_none(self, bridge):
+    async def test_no_callback_when_none(self, bridge):
         bridge.on_note_callback = None
-        bridge._on_note_on({"note": 60, "velocity": 80, "name": "C4"})
+        await bridge._on_note_on({"note": 60, "velocity": 80, "name": "C4"})
         # Should not raise

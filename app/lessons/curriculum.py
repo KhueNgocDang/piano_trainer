@@ -4,6 +4,7 @@ Level 0: The Piano Keyboard (fundamentals)
 Level 1: The Staff & Clefs (1.1–1.4)
 Level 2: Note Identification — Treble Clef (2.1–2.5)
 Level 3: Note Identification — Bass Clef (3.1–3.5)
+Level 4: Both Clefs Together (4.1–4.2)
 """
 
 from __future__ import annotations
@@ -809,10 +810,113 @@ LEVEL_3_LESSONS: tuple[Lesson, ...] = (
     LESSON_3_5,
 )
 
+# ══════════════════════════════════════════════════════════════════
+# Level 4 — Both Clefs Together
+# ══════════════════════════════════════════════════════════════════
+
+# Grand staff: combine full treble + bass ranges
+_L4_GRAND_POOL = _L2_POOL_5 + _L3_POOL_5
+# Remove duplicates (C4/60 may appear in both), keep tuple
+_L4_GRAND_POOL = tuple(sorted(set(_L4_GRAND_POOL)))
+
+# Landmark notes for rapid-fire drill: Middle C, Bass F2, Treble G5
+_L4_LANDMARKS = (60, 41, 79)  # C4, F2, G5
+
+LESSON_4_1 = Lesson(
+    id="4.1",
+    title="Grand Staff Reading",
+    level=4,
+    description="Read notes on both clefs — treble and bass together on the grand staff.",
+    content_md="""\
+## Grand Staff Reading
+
+You've mastered reading treble clef and bass clef separately. Now it's time \
+to read them **together** on the **grand staff**!
+
+### How it works
+- A note will appear on either the treble staff or the bass staff
+- You must first identify **which clef** the note is on
+- Then read the note name and play it on your piano
+
+### Key differences to watch for
+The same staff position means **different notes** depending on the clef:
+- **Line 1** in treble = **E4**, but line 1 in bass = **G2**
+- **Line 3** in treble = **B4**, but line 3 in bass = **D3**
+- **Middle C** (C4) appears on a ledger line in both clefs
+
+### Strategy
+1. Look at which staff the note is on (top = treble, bottom = bass)
+2. Use your landmark notes: E4 (treble line 1), B4 (treble line 3), \
+D3 (bass line 3), G2 (bass line 1)
+3. Count steps from the nearest landmark
+
+### Exercise
+Random notes will appear on the grand staff. Play them all!
+""",
+    exercises=(
+        Exercise(
+            clef=Clef.GRAND,
+            note_pool=_L4_GRAND_POOL,
+            num_notes=20,
+            pass_threshold=0.80,
+        ),
+    ),
+    prerequisite_id="3.5",
+)
+
+LESSON_4_2 = Lesson(
+    id="4.2",
+    title="Landmark Notes",
+    level=4,
+    description="Rapid-fire drill on the most important anchor notes across both clefs.",
+    content_md="""\
+## Landmark Notes
+
+**Landmark notes** are anchor points you can recognize instantly — without \
+counting steps from other notes. The faster you recognize these, the faster \
+you can read all other notes by counting from the nearest landmark.
+
+### The Big Three Landmarks
+
+| Landmark | MIDI | Clef | Position |
+|----------|------|------|----------|
+| **Middle C (C4)** | 60 | Both | Ledger line between staves |
+| **F2** | 41 | Bass | Space below line 1 |
+| **G5** | 79 | Treble | Space above line 5 |
+
+### Additional landmarks to internalize
+- **G4** (MIDI 67) — treble line 2, the treble clef curls around it
+- **F3** (MIDI 53) — bass line 4, the bass clef dots surround it
+- **B4** (MIDI 71) — treble line 3 (middle of treble staff)
+- **D3** (MIDI 50) — bass line 3 (middle of bass staff)
+
+### Exercise
+Only the three main landmarks will appear. Identify them as fast as you can!
+""",
+    exercises=(
+        Exercise(
+            clef=Clef.GRAND,
+            note_pool=_L4_LANDMARKS,
+            num_notes=15,
+            pass_threshold=0.80,
+        ),
+    ),
+    prerequisite_id="4.1",
+)
+
+LEVEL_4_LESSONS: tuple[Lesson, ...] = (
+    LESSON_4_1,
+    LESSON_4_2,
+)
+
 # ── All lessons in order ──────────────────────────────────────────
 
 ALL_LESSONS: tuple[Lesson, ...] = (
-    LEVEL_0_LESSONS + LEVEL_1_LESSONS + LEVEL_2_LESSONS + LEVEL_3_LESSONS
+    LEVEL_0_LESSONS
+    + LEVEL_1_LESSONS
+    + LEVEL_2_LESSONS
+    + LEVEL_3_LESSONS
+    + LEVEL_4_LESSONS
 )
 
 LESSON_BY_ID: dict[str, Lesson] = {lsn.id: lsn for lsn in ALL_LESSONS}

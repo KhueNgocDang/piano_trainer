@@ -113,8 +113,14 @@ A progressive curriculum that teaches sight-reading from absolute zero. Each les
 - **Lesson 0.2 — One Octave:** All 7 white keys C4–B4 with finding tips (relative to black key groups). Exercise: play C4–B4.
 - **Lesson 0.3 — Two Octaves:** Expand range to C3–B4 (14 white keys). Exercise: play C3–B4.
 
+##### Level 0.5: Hand Placement
+- **Lesson HP.1 — Finger Numbers & Hand Posture:** Introduce finger numbering (1=thumb → 5=pinky), curved finger posture, relaxed wrists, and proper hand shape.
+- **Lesson HP.2 — Right Hand C Position:** Right hand on C4–G4 (thumb on C4). Exercise: play each finger in sequence and by name.
+- **Lesson HP.3 — Left Hand C Position:** Left hand on C3–G3 (pinky on C3). Exercise: play each finger in sequence and by name.
+- **Lesson HP.4 — Both Hands Together:** Parallel motion C–G with both hands. Introduces coordinating left and right simultaneously.
+
 ##### Level 1: The Staff & Clefs
-- **Lesson 1.1 — The Staff:** Explain 5 lines, 4 spaces. Interactive SVG diagram. (Prerequisite: Lesson 0.3)
+- **Lesson 1.1 — The Staff:** Explain 5 lines, 4 spaces. Interactive SVG diagram. (Prerequisite: Lesson HP.4)
 - **Lesson 1.2 — Treble Clef:** Introduce treble clef. Line notes (E-G-B-D-F), space notes (F-A-C-E). Mnemonics.
 - **Lesson 1.3 — Bass Clef:** Introduce bass clef. Line notes (G-B-D-F-A), space notes (A-C-E-G). Mnemonics.
 - **Lesson 1.4 — Grand Staff:** Combine treble + bass. Middle C as anchor point.
@@ -378,7 +384,7 @@ Each milestone is a self-contained deliverable. After completing each one, devel
 
 ---
 
-#### Milestone 2 — Dynamic Keyboard Rendering
+#### Milestone 2 — Dynamic Keyboard Rendering ✅ COMPLETE
 
 **Goal:** Render a full 88-key CASIO Privia keyboard as interactive SVG that lights up in real-time when you play.
 
@@ -403,7 +409,7 @@ Each milestone is a self-contained deliverable. After completing each one, devel
 
 ---
 
-#### Milestone 3 — Staff Notation Renderer (Treble Clef)
+#### Milestone 3 — Staff Notation Renderer (Treble Clef) ✅ COMPLETE
 
 **Goal:** Render a treble clef staff with a single note, and validate whether the user played the correct note.
 
@@ -490,21 +496,23 @@ Each milestone is a self-contained deliverable. After completing each one, devel
 
 ---
 
-#### Milestone 6 — Level 4 (Both Clefs) & Practice Mode
+#### Milestone 6 — Level 4 (Both Clefs) & Practice Mode ✅ COMPLETE
 
 **Goal:** Grand staff reading + a free-form practice mode with configurable difficulty.
 
 **Deliverables:**
-- [ ] Lesson 4.1 — Grand Staff Reading: notes randomly on treble or bass clef.
-- [ ] Lesson 4.2 — Landmark Notes: rapid-fire drill on Middle C, Bass F2, Treble G5.
-- [ ] Practice page (`/practice`) with configuration sidebar:
+- [x] Lesson 4.1 — Grand Staff Reading: notes randomly on treble or bass clef.
+- [x] Lesson 4.2 — Landmark Notes: rapid-fire drill on Middle C, Bass F2, Treble G5.
+- [x] Practice page (`/practice`) with configuration sidebar:
   - Clef selector (treble / bass / grand staff).
-  - Note range slider (mapped to keyboard profile).
+  - Note range (adjusted per clef selection).
   - Sharps/flats toggle.
   - Ledger lines toggle.
-- [ ] Wait Mode: infinite random notes, user plays at their own pace.
-- [ ] Session scoring: hits, misses, accuracy %, current streak, best streak.
-- [ ] Session resets on page load or "New Session" button.
+- [x] Wait Mode: infinite random notes, user plays at their own pace.
+- [x] Session scoring: hits, misses, accuracy %, current streak, best streak.
+- [x] Session resets on page load or "New Session" button.
+- [x] Full prerequisite chain: 0.1→…→3.5→4.1→4.2 (19 lessons).
+- [x] Test suite: 39 new tests (260 total).
 
 **Verification checklist:**
 > 1. Lesson 4.1 shows notes on both clefs — user must read which clef to decide the note.
@@ -602,7 +610,29 @@ Each milestone is a self-contained deliverable. After completing each one, devel
 
 ---
 
-#### Milestone 11 — Settings & Additional Keyboard Profiles
+#### Milestone 11 — Hand Placement (Level 0.5)
+
+**Goal:** Teach proper hand posture, finger numbering, and basic C-position hand placement for both hands.
+
+**Deliverables:**
+- [ ] Lesson HP.1 — Finger Numbers & Hand Posture: visual diagrams of finger numbering (1=thumb → 5=pinky), curved finger shape, relaxed wrist position.
+- [ ] Lesson HP.2 — Right Hand C Position: place right hand on C4–G4 (thumb on C4). Exercises: play each finger by number, identify which finger plays which note.
+- [ ] Lesson HP.3 — Left Hand C Position: place left hand on C3–G3 (pinky on C3). Mirror exercises for the left hand.
+- [ ] Lesson HP.4 — Both Hands Together: parallel C–G motion with both hands. Exercise: play matching fingers simultaneously.
+- [ ] SVG hand diagram overlaid on/near the virtual keyboard showing finger placement.
+- [ ] Prerequisite chain: 0.3 → HP.1 → HP.2 → HP.3 → HP.4 → 1.1.
+- [ ] Keyboard active zone highlight matching the hand position (C3–G3 for left, C4–G4 for right).
+
+**Verification checklist:**
+> 1. Lesson HP.1 shows clear finger numbering diagrams for both hands.
+> 2. HP.2 highlights C4–G4 and guides the user to place each right-hand finger.
+> 3. HP.3 does the same for left hand on C3–G3.
+> 4. HP.4 requires playing both hands — exercise tracks notes from both ranges.
+> 5. Hand placement lessons fit naturally between Level 0 and Level 1.
+
+---
+
+#### Milestone 12 — Settings & Additional Keyboard Profiles
 
 **Goal:** Settings page with keyboard profile management and user preferences.
 

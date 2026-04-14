@@ -10,8 +10,8 @@ def test_midi_event_dataclass():
     assert e.event_type == "info"
 
 
-def test_bridge_on_note_on_logs_event(bridge: MidiBridge):
-    bridge._on_note_on({"note": 60, "velocity": 100, "name": "C4"})
+async def test_bridge_on_note_on_logs_event(bridge: MidiBridge):
+    await bridge._on_note_on({"note": 60, "velocity": 100, "name": "C4"})
     assert len(bridge.log_entries) == 1
     assert "NOTE ON" in bridge.log_entries[0].message
     assert "C4" in bridge.log_entries[0].message
@@ -28,8 +28,8 @@ def test_bridge_on_note_off_logs_event(bridge: MidiBridge):
     assert bridge.log_entries[0].event_type == "note_off"
 
 
-def test_bridge_on_note_on_defaults_for_missing_keys(bridge: MidiBridge):
-    bridge._on_note_on({})
+async def test_bridge_on_note_on_defaults_for_missing_keys(bridge: MidiBridge):
+    await bridge._on_note_on({})
     assert len(bridge.log_entries) == 1
     assert "MIDI 0" in bridge.log_entries[0].message
     assert "vel=0" in bridge.log_entries[0].message
@@ -73,17 +73,19 @@ def test_bridge_on_status_error(bridge: MidiBridge):
     assert any("MIDI access denied" in e.message for e in bridge.log_entries)
 
 
-def test_bridge_log_capped_at_max(bridge: MidiBridge):
+async def test_bridge_log_capped_at_max(bridge: MidiBridge):
     for i in range(MAX_LOG_ENTRIES + 50):
-        bridge._on_note_on({"note": i % 128, "velocity": 64, "name": f"N{i}"})
+        await bridge._on_note_on(
+            {"note": i % 128, "velocity": 64, "name": f"N{i}"}
+        )
     assert len(bridge.log_entries) == MAX_LOG_ENTRIES
 
 
-def test_bridge_multiple_note_sequence(bridge: MidiBridge):
+async def test_bridge_multiple_note_sequence(bridge: MidiBridge):
     """Simulate a short sequence of notes."""
-    bridge._on_note_on({"note": 60, "velocity": 80, "name": "C4"})
+    await bridge._on_note_on({"note": 60, "velocity": 80, "name": "C4"})
     bridge._on_note_off({"note": 60, "name": "C4"})
-    bridge._on_note_on({"note": 62, "velocity": 90, "name": "D4"})
+    await bridge._on_note_on({"note": 62, "velocity": 90, "name": "D4"})
     bridge._on_note_off({"note": 62, "name": "D4"})
     assert len(bridge.log_entries) == 4
     assert bridge.log_entries[0].event_type == "note_on"

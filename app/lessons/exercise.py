@@ -6,7 +6,7 @@ import inspect
 import random
 from dataclasses import dataclass, field
 
-from nicegui import background_tasks, ui
+from nicegui import ui
 
 from app.keyboard.renderer import is_black_key
 from app.lessons.models import Clef, Exercise
@@ -191,7 +191,7 @@ class LessonExercise:
             return "treble"
         return "bass"
 
-    def _start(self) -> None:
+    async def _start(self) -> None:
         if not self._bridge.connected:
             ui.notify(
                 "No MIDI device connected. Please select a device in the header first.",
@@ -210,7 +210,7 @@ class LessonExercise:
         if self._start_btn:
             self._start_btn.visible = False
         self._update_display()
-        self._next_note()
+        await self._next_note()
         self._bridge.on_note_callback = self._on_note
 
         # Dim keys outside the exercise note pool range
@@ -218,14 +218,14 @@ class LessonExercise:
         if pool:
             ui.run_javascript(f"setActiveZone({min(pool)}, {max(pool)})")
 
-    def _next_note(self) -> None:
+    async def _next_note(self) -> None:
         """Show the next note or finish."""
         if self._state.target_midi:
             ui.run_javascript(f"resetPianoKey({self._state.target_midi})")
 
         midi = self._state.pick_next()
         if midi is None:
-            self._finish()
+            await self._finish()
             return
 
         if self._staff_html:
@@ -235,7 +235,7 @@ class LessonExercise:
         ui.run_javascript(f"highlightPianoKeyPersist({midi}, '#42A5F5')")
         self._update_display()
 
-    def _on_note(self, note: int, velocity: int) -> None:
+    async def _on_note(self, note: int, velocity: int) -> None:
         if not self._active:
             return
 
@@ -259,7 +259,7 @@ class LessonExercise:
                     replace="text-h6 font-bold q-ml-md text-green-600"
                 )
             self._update_display()
-            self._next_note()
+            await self._next_note()
         else:
             self._state.misses += 1
             ui.run_javascript(f"flashPianoKey({note}, '#F44336', 600)")
@@ -286,7 +286,7 @@ class LessonExercise:
                 f"Hits: {self._state.hits} | Misses: {self._state.misses}"
             )
 
-    def _finish(self) -> None:
+    async def _finish(self) -> None:
         self._active = False
         self._bridge.on_note_callback = None
         if self._state.target_midi:
@@ -323,4 +323,4 @@ class LessonExercise:
         if self._on_complete:
             result = self._on_complete(score, passed)
             if inspect.isawaitable(result):
-                background_tasks.create(result)
+                await result

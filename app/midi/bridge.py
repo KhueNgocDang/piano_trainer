@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import inspect
 import logging
 from dataclasses import dataclass, field
 from datetime import datetime
@@ -101,7 +102,7 @@ class MidiBridge:
 
     # --- Event handlers ---
 
-    def _on_note_on(self, data: dict) -> None:
+    async def _on_note_on(self, data: dict) -> None:
         note = data.get("note", 0)
         velocity = data.get("velocity", 0)
         name = data.get("name", "?")
@@ -109,7 +110,9 @@ class MidiBridge:
             f"NOTE ON:  {name} (MIDI {note}) vel={velocity}", "note_on"
         )
         if self.on_note_callback and velocity > 0:
-            self.on_note_callback(note, velocity)
+            result = self.on_note_callback(note, velocity)
+            if inspect.isawaitable(result):
+                await result
 
     def _on_note_off(self, data: dict) -> None:
         note = data.get("note", 0)

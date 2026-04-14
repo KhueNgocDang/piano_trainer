@@ -29,11 +29,14 @@ from app.lessons.curriculum import (
     LESSON_3_3,
     LESSON_3_4,
     LESSON_3_5,
+    LESSON_4_1,
+    LESSON_4_2,
     LESSON_BY_ID,
     LEVEL_0_LESSONS,
     LEVEL_1_LESSONS,
     LEVEL_2_LESSONS,
     LEVEL_3_LESSONS,
+    LEVEL_4_LESSONS,
 )
 from app.lessons import db as lesson_db
 from app.lessons.exercise import ExerciseState, FLASH_JS
@@ -105,7 +108,7 @@ class TestLessonModels:
 
 class TestCurriculum:
     def test_all_lessons_count(self):
-        assert len(ALL_LESSONS) == 17  # 3 + 4 + 5 + 5
+        assert len(ALL_LESSONS) == 19  # 3 + 4 + 5 + 5 + 2
 
     def test_all_levels_make_all(self):
         assert (
@@ -114,6 +117,7 @@ class TestCurriculum:
             + LEVEL_1_LESSONS
             + LEVEL_2_LESSONS
             + LEVEL_3_LESSONS
+            + LEVEL_4_LESSONS
         )
 
     def test_lesson_ids_unique(self):
@@ -126,6 +130,8 @@ class TestCurriculum:
         assert LESSON_BY_ID["1.4"] is LESSON_1_4
         assert LESSON_BY_ID["2.1"] is LESSON_2_1
         assert LESSON_BY_ID["3.5"] is LESSON_3_5
+        assert LESSON_BY_ID["4.1"] is LESSON_4_1
+        assert LESSON_BY_ID["4.2"] is LESSON_4_2
 
     def test_lesson_0_1_unlocked(self):
         assert LESSON_0_1.prerequisite_id is None
@@ -297,6 +303,49 @@ class TestCurriculum:
 
     def test_level_3_content(self):
         for lesson in LEVEL_3_LESSONS:
+            assert len(lesson.content_md) > 50
+
+    # ── Level 4 — Both Clefs Together ─────────────────────────────
+
+    def test_level_4_count(self):
+        assert len(LEVEL_4_LESSONS) == 2
+
+    def test_level_4_all_grand(self):
+        for lesson in LEVEL_4_LESSONS:
+            assert lesson.level == 4
+            for ex in lesson.exercises:
+                assert ex.clef == Clef.GRAND
+
+    def test_level_4_prerequisite_chain(self):
+        assert LESSON_4_1.prerequisite_id == "3.5"
+        assert LESSON_4_2.prerequisite_id == "4.1"
+
+    def test_lesson_4_1_grand_staff_pool(self):
+        ex = LESSON_4_1.exercises[0]
+        pool = set(ex.note_pool)
+        # Should include both treble and bass notes
+        has_treble = any(m >= 64 for m in pool)
+        has_bass = any(m < 55 for m in pool)
+        assert has_treble, "Lesson 4.1 should include treble range notes"
+        assert has_bass, "Lesson 4.1 should include bass range notes"
+        # Should include notes from both L2 and L3 ranges
+        assert 60 in pool  # Middle C
+        assert 40 in pool or 41 in pool  # Low bass notes
+
+    def test_lesson_4_1_no_duplicates(self):
+        ex = LESSON_4_1.exercises[0]
+        assert len(ex.note_pool) == len(set(ex.note_pool))
+
+    def test_lesson_4_2_landmarks(self):
+        ex = LESSON_4_2.exercises[0]
+        pool = set(ex.note_pool)
+        assert 60 in pool  # Middle C (C4)
+        assert 41 in pool  # F2 (bass landmark)
+        assert 79 in pool  # G5 (treble landmark)
+        assert len(pool) == 3
+
+    def test_level_4_content(self):
+        for lesson in LEVEL_4_LESSONS:
             assert len(lesson.content_md) > 50
 
     # ── Full prerequisite chain ───────────────────────────────────
